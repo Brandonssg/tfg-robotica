@@ -20,3 +20,7 @@ sudo apt install -y python3-colcon-common-extensions python3-rosdep git
 sudo rosdep init
 rosdep update
 
+## Instalación de TurtleBot3
+sudo apt install -y ros-jazzy-turtlebot3 ros-jazzy-turtlebot3-msgs ros-jazzy-turtlebot3-simulations
+echo "export TURTLEBOT3_MODEL=waffle" >> ~/.bashrc
+source ~/.bashrc
