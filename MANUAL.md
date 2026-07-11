@@ -24,3 +24,10 @@ rosdep update
 sudo apt install -y ros-jazzy-turtlebot3 ros-jazzy-turtlebot3-msgs ros-jazzy-turtlebot3-simulations
 echo "export TURTLEBOT3_MODEL=waffle" >> ~/.bashrc
 source ~/.bashrc
+
+## Uso
+### Lanzar simulación base con TurtleBot3
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+
+### Control manual por teclado (terminal aparte)
+ros2 run turtlebot3_teleop teleop_keyboard
