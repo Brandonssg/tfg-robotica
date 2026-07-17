@@ -1,7 +1,7 @@
 """
 warehouse_tb3.launch.py
 
-Arranca el mundo 'warehouse_turtlebot3.sdf' (almacén Fuel sin Tugbot)
+Arranca el mundo 'warehouse_expand.sdf' (almacén Fuel sin Tugbot y con algunos elementos añadidos)
 y spawnea un TurtleBot3 Waffle dentro, replicando lo que hace
 turtlebot3_gazebo/launch/turtlebot3_world.launch.py pero con este mundo.
 
@@ -26,7 +26,7 @@ def generate_launch_description():
     # --- Rutas ---
     # Carpeta de este propio repo (~/TFG), calculada relativa a este archivo
     tfg_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    world_path = os.path.join(tfg_dir, 'worlds', 'warehouse_turtlebot3.sdf')
+    world_path = os.path.join(tfg_dir, 'worlds', 'warehouse_expand.sdf')
 
     turtlebot3_gazebo_dir = get_package_share_directory('turtlebot3_gazebo')
     launch_file_dir = os.path.join(turtlebot3_gazebo_dir, 'launch')
@@ -124,6 +124,11 @@ def generate_launch_description():
     ld.add_action(robot_state_publisher_cmd)
     ld.add_action(spawn_turtlebot_cmd)
     ld.add_action(start_gazebo_ros_bridge_cmd)
+    ld.add_action(AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', '/home/bran/.gz/fuel/fuel.ignitionrobotics.org/openrobotics/models/warehouse/5'))
+    ld.add_action(AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', '/home/bran/.gz/fuel/fuel.ignitionrobotics.org/movai/models/shelf_big/2'))
+    ld.add_action(AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', '/home/bran/.gz/fuel/fuel.ignitionrobotics.org/movai/models/shelf/1'))
+    ld.add_action(AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', '/home/bran/.gz/fuel/fuel.ignitionrobotics.org/movai/models/cart_model_2/2'))
+    ld.add_action(AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', '/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/aws_robomaker_warehouse_clutteringd_01/4'))
     if TURTLEBOT3_MODEL != 'burger':
         ld.add_action(start_gazebo_ros_image_bridge_cmd)
     ld.add_action(set_env_vars_resources)
