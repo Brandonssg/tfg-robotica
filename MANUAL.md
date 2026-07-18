@@ -45,10 +45,15 @@ export TURTLEBOT3_MODEL=waffle
 ros2 launch ~/TFG/launch/warehouse_tb3.launch.py
 ```
 
+**Nota**: en el primer arranque con conexión a internet, Gazebo descarga
+automáticamente los modelos de Fuel (estanterías, carros, almacén) a la caché
+local `~/.gz/fuel/`. Los arranques posteriores no requieren conexión.
+
 **Nota conocida**: el TurtleBot3 se renderiza en gris plano en este mundo (incompatibilidad
 conocida entre las mallas `.dae` del paquete `turtlebot3_gazebo` y el motor de render Ogre2 de
 Gazebo Harmonic). No afecta a sensores, TF ni navegación — verificado mediante los topics del
 bridge (`/odom`, `/scan`, `/imu`, `/tf`, `/camera/camera_info`, `/cmd_vel`).
+
 
 
 ## SLAM: construcción del mapa
@@ -56,15 +61,37 @@ bridge (`/odom`, `/scan`, `/imu`, `/tf`, `/camera/camera_info`, `/cmd_vel`).
 Con la simulación base lanzada (`warehouse_tb3.launch.py`), en otra terminal:
 
 ```
-ros2 launch slam_toolbox online_async_launch.py use_sim_time:=true
+ros2 launch slam_toolbox online_async_launch.py \
+  use_sim_time:=true \
+  slam_params_file:=$HOME/TFG/config/slam_params_warehouse.yaml
 ```
 
-Mueve el robot con teleop para cubrir todo el mapa y, cuando esté completo, guárdalo:
+El archivo `config/slam_params_warehouse.yaml` contiene la configuración afinada
+para este entorno. Los cambios clave respecto a los valores por defecto:
+
+
+- `minimum_travel_distance/heading: 0.3` — procesa scans con más frecuencia,
+  mejorando la cobertura en giros.
+
+En caso de no conseguir un mapeado correcto puedes probar con los siguientes cambios:
+- `do_loop_closing: false` — en el almacén los pasillos de estanterías son
+  geométricamente muy similares entre sí, lo que provocaba falsos cierres de
+  bucle (el scan-matcher "reconocía" un pasillo equivocado y deformaba el mapa).
+
+- `distance_variance_penalty: 2.0` y `angle_variance_penalty: 2.0` — penalizan
+  correcciones grandes de pose, evitando saltos bruscos del mapa.
+
+- `correlation_search_space_dimension: 0.3` (por defecto 0.5) — restringe la
+  búsqueda del scan-matcher local para que confíe más en la odometría.
+
+Mueve el robot con teleop para cubrir todo el mapa, a velocidad moderada y
+evitando giros bruscos sobre sí mismo. Cuando esté completo, guárdalo:
 
 ```
-ros2 run nav2_map_server map_saver_cli -f ~/TFG/maps/mapa_tfg
+ros2 run nav2_map_server map_saver_cli -f ~/TFG/maps/mapa_tfg_semi_3
 ```
 
-Esto genera `mapa_tfg.pgm` (imagen del mapa) y `mapa_tfg.yaml` (metadatos: resolución, origen).
-
-
+Esto genera `mapa_tfg_semi_3.pgm` (imagen del mapa) y `mapa_tfg_semi_3.yaml`
+(metadatos: resolución 0.05 m/celda y origen). El mapa validado para navegación
+es `maps/mapa_tfg_semi_3`; los demás archivos de `maps/` son iteraciones
+previas del proceso de ajuste, conservadas como evidencia.
