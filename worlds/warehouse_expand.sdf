@@ -1,0 +1,4307 @@
+<sdf version='1.10'>
+  <world name='world_demo'>
+    <gravity>0 0 -9.8000000000000007</gravity>
+    <physics type='ode'>
+      <max_step_size>0.01</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <max_contacts>10</max_contacts>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    <plugin name='ignition::gazebo::systems::Physics' filename='libignition-gazebo-physics-system.so'/>
+    <plugin name='ignition::gazebo::systems::UserCommands' filename='libignition-gazebo-user-commands-system.so'/>
+    <plugin name='ignition::gazebo::systems::SceneBroadcaster' filename='libignition-gazebo-scene-broadcaster-system.so'/>
+    <plugin name='ignition::gazebo::systems::Imu' filename='ignition-gazebo-imu-system'/>
+    <plugin name='ignition::gazebo::systems::Sensors' filename='ignition-gazebo-sensors-system'>
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <gui fullscreen='false'>
+      <plugin name='3D View' filename='GzScene3D'>
+        <ignition-gui>
+          <title>3D View</title>
+          <property type='bool' key='showTitleBar'>false</property>
+          <property type='string' key='state'>docked</property>
+        </ignition-gui>
+        <engine>ogre2</engine>
+        <scene>scene</scene>
+        <ambient_light>0.4 0.4 0.4</ambient_light>
+        <background_color>0.8 0.8 0.8</background_color>
+        <camera_pose>13.4 -6.1 2.23 0 0.4 -1.83</camera_pose>
+      </plugin>
+      <plugin name='World control' filename='WorldControl'>
+        <ignition-gui>
+          <title>World control</title>
+          <property type='bool' key='showTitleBar'>false</property>
+          <property type='bool' key='resizable'>false</property>
+          <property type='double' key='height'>72</property>
+          <property type='double' key='width'>121</property>
+          <property type='double' key='z'>1</property>
+          <property type='string' key='state'>floating</property>
+          <anchors target='3D View'>
+            <line own='left' target='left'/>
+            <line own='bottom' target='bottom'/>
+          </anchors>
+        </ignition-gui>
+        <play_pause>true</play_pause>
+        <step>true</step>
+        <start_paused>true</start_paused>
+      </plugin>
+      <plugin name='World stats' filename='WorldStats'>
+        <ignition-gui>
+          <title>World stats</title>
+          <property type='bool' key='showTitleBar'>false</property>
+          <property type='bool' key='resizable'>false</property>
+          <property type='double' key='height'>110</property>
+          <property type='double' key='width'>290</property>
+          <property type='double' key='z'>1</property>
+          <property type='string' key='state'>floating</property>
+          <anchors target='3D View'>
+            <line own='right' target='right'/>
+            <line own='bottom' target='bottom'/>
+          </anchors>
+        </ignition-gui>
+        <sim_time>true</sim_time>
+        <real_time>true</real_time>
+        <real_time_factor>true</real_time_factor>
+        <iterations>true</iterations>
+      </plugin>
+      <plugin name='Transform control' filename='TransformControl'>
+        <ignition-gui>
+          <property type='bool' key='showTitleBar'>false</property>
+          <property key='x' type='double'>0</property>
+          <property key='y' type='double'>0</property>
+          <property key='width' type='double'>250</property>
+          <property key='height' type='double'>50</property>
+          <property key='state' type='string'>floating</property>
+          <property key='cardBackground' type='string'>#666666</property>
+        </ignition-gui>
+      </plugin>
+      <plugin name='Shapes' filename='Shapes'>
+        <ignition-gui>
+          <property type='bool' key='showTitleBar'>false</property>
+          <property key='x' type='double'>250</property>
+          <property key='y' type='double'>0</property>
+          <property key='width' type='double'>150</property>
+          <property key='height' type='double'>50</property>
+          <property key='state' type='string'>floating</property>
+          <property key='cardBackground' type='string'>#666666</property>
+        </ignition-gui>
+      </plugin>
+      <plugin name='Screenshot' filename='Screenshot'>
+        <ignition-gui>
+          <property type='bool' key='showTitleBar'>false</property>
+          <property key='x' type='double'>400</property>
+          <property key='y' type='double'>0</property>
+          <property key='width' type='double'>50</property>
+          <property key='height' type='double'>50</property>
+          <property key='state' type='string'>floating</property>
+          <property key='cardBackground' type='string'>#666666</property>
+        </ignition-gui>
+      </plugin>
+      <plugin name='Component inspector' filename='ComponentInspector'>
+        <ignition-gui>
+          <property key='x' type='double'>0</property>
+          <property key='y' type='double'>0</property>
+          <property key='width' type='double'>400</property>
+          <property key='height' type='double'>375</property>
+          <property key='state' type='string'>docked_collapsed</property>
+        </ignition-gui>
+      </plugin>
+      <plugin name='Entity tree' filename='EntityTree'>
+        <ignition-gui>
+          <property key='x' type='double'>0</property>
+          <property key='y' type='double'>0</property>
+          <property key='width' type='double'>400</property>
+          <property key='height' type='double'>375</property>
+          <property key='state' type='string'>docked_collapsed</property>
+        </ignition-gui>
+      </plugin>
+      <plugin name='Teleop' filename='Teleop'>
+        <ignition-gui>
+          <property key='x' type='double'>0</property>
+          <property key='y' type='double'>0</property>
+          <property key='width' type='double'>400</property>
+          <property key='height' type='double'>900</property>
+          <property key='state' type='string'>docked</property>
+        </ignition-gui>
+        <topic>/cmd_vel</topic>
+      </plugin>
+    </gui>
+    <scene>
+      <ambient>1 1 1 1</ambient>
+      <background>0.300000012 0.699999988 0.899999976 1</background>
+      <shadows>false</shadows>
+      <grid>false</grid>
+    </scene>
+    <magnetic_field>5.5644999999999998e-06 2.2875799999999999e-05 -4.2388400000000002e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+    <model name='ground_plane'>
+      <static>true</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>1 1</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>0 0 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='warehouse'>
+      <pose>0 0 -0.089999999999999997 0 0 0</pose>
+      <self_collide>false</self_collide>
+      <link name='warehouse_base'>
+        <pose>0 0 0 0 0 0</pose>
+        <collision name='warehouse_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/warehouse_colision.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='warehouse_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/warehouse.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='drop_area_visual'>
+          <pose>0 0 0.10100000000000001 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/warehouse.dae</uri>
+              <submesh>
+                <name>drop1</name>
+                <center>true</center>
+              </submesh>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='cart1'>
+      <pose>-5.7299999999992233 15.000000000000155 0.10999100464438517 -1.1346038970905752e-12 -8.0322775167386349e-07 1.6320734134659762e-14</pose>
+      <link name='base_link'>
+        <pose>0 0 0 0 0 -1.5708</pose>
+        <inertial>
+          <pose>0 -0.5 0.5 0 0 0</pose>
+          <mass>30</mass>
+          <inertia>
+            <ixx>0.10000000000000001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.10000000000000001</iyy>
+            <iyz>0</iyz>
+            <izz>0.10000000000000001</izz>
+          </inertia>
+        </inertial>
+        <collision name='base_link_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/cart_base_collision.stl</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>5</max_contacts>
+          <surface>
+            <contact>
+              <ode>
+                <soft_cfm>1</soft_cfm>
+                <soft_erp>0.40000000000000002</soft_erp>
+                <kp>1000000</kp>
+                <kd>1</kd>
+                <min_depth>0.01</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>1.1599999999999999</mu>
+                <mu2>1.1599999999999999</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='base_link_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/cart_base.dae</uri>
+              <submesh>
+                <name>base_metal</name>
+                <center>false</center>
+              </submesh>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='base_shelf_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/cart_base.dae</uri>
+              <submesh>
+                <name>base_shelf</name>
+                <center>false</center>
+              </submesh>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='back_left_sup_visual'>
+          <pose>-0.245 -1.0049999999999999 0.050000000000000003 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/sup_wheels.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='back_right_sup_visual'>
+          <pose>0.245 -1.0049999999999999 0.050000000000000003 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/sup_wheels.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='tag_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/cart_base.dae</uri>
+              <submesh>
+                <name>tag</name>
+                <center>false</center>
+              </submesh>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>1 1 1 1</specular>
+            <pbr>
+              <metal>
+                <albedo_map>meshes/cart_tag.png</albedo_map>
+              </metal>
+            </pbr>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <link name='back_left'>
+        <pose>-1.04 -0.24499999999999922 -0.049999999999999975 -2.5324788952991937e-16 -5.4208609348469524e-22 1.570800000000002</pose>
+        <inertial>
+          <pose>0 0 0 0 1.5707963267948966 0</pose>
+          <mass>0.01</mass>
+          <inertia>
+            <ixx>1.7499999999999998e-05</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1.7499999999999998e-05</iyy>
+            <iyz>0</iyz>
+            <izz>3.1250000000000001e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='back_left_collision'>
+          <pose>0 0 0 0 1.5707963267948966 0</pose>
+          <geometry>
+            <cylinder>
+              <length>0.029999999999999999</length>
+              <radius>0.059999999999999998</radius>
+            </cylinder>
+          </geometry>
+          <max_contacts>5</max_contacts>
+          <surface>
+            <contact>
+              <ode>
+                <soft_cfm>1</soft_cfm>
+                <soft_erp>0.40000000000000002</soft_erp>
+                <kp>1000000</kp>
+                <kd>1</kd>
+                <min_depth>0.01</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>1.1599999999999999</mu>
+                <mu2>1.1599999999999999</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='back_left_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/wheel.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='back_left_joint' type='revolute'>
+        <child>back_left</child>
+        <parent>base_link</parent>
+        <axis>
+          <xyz>1 -1.5192908393215678e-64 -1.2325951644078309e-32</xyz>
+          <limit>
+            <lower>-inf</lower>
+            <upper>inf</upper>
+            <effort>inf</effort>
+            <velocity>inf</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.0001</damping>
+            <friction>0.5</friction>
+          </dynamics>
+        </axis>
+        <pose>-1.6653345369377348e-16 0 -6.9388939039072284e-18 -2.4651903288156619e-32 1.2325951644078309e-32 -1.5192908393215678e-64</pose>
+      </joint>
+      <link name='back_right'>
+        <pose>-1.0400000000000009 0.24499999999999922 -0.049999999999999982 -6.8643412529504782e-16 -6.449092547980593e-22 1.570800000000002</pose>
+        <inertial>
+          <pose>0 0 0 0 1.5707963267948966 0</pose>
+          <mass>0.01</mass>
+          <inertia>
+            <ixx>1.7499999999999998e-05</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1.7499999999999998e-05</iyy>
+            <iyz>0</iyz>
+            <izz>3.1250000000000001e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='back_right_collision'>
+          <pose>0 0 0 0 1.5707963267948966 0</pose>
+          <geometry>
+            <cylinder>
+              <length>0.029999999999999999</length>
+              <radius>0.059999999999999998</radius>
+            </cylinder>
+          </geometry>
+          <max_contacts>5</max_contacts>
+          <surface>
+            <contact>
+              <ode>
+                <soft_cfm>1</soft_cfm>
+                <soft_erp>0.40000000000000002</soft_erp>
+                <kp>1000000</kp>
+                <kd>1</kd>
+                <min_depth>0.01</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>1.1599999999999999</mu>
+                <mu2>1.1599999999999999</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='back_right_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/wheel.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='back_right_joint' type='revolute'>
+        <child>back_right</child>
+        <parent>base_link</parent>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>-inf</lower>
+            <upper>inf</upper>
+            <effort>inf</effort>
+            <velocity>inf</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.0001</damping>
+            <friction>0.5</friction>
+          </dynamics>
+        </axis>
+        <pose>1.1102230246251565e-16 -2.2204460492503131e-16 0 -4.9303806576313238e-32 0 0</pose>
+      </joint>
+      <link name='wheel_sup_front_left'>
+        <pose>0 -0.24500000000000099 0.049999999999999947 -1.4971555109606362e-22 -6.3286232790698526e-22 1.5707999999992921</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>0.01</mass>
+          <inertia>
+            <ixx>1.7499999999999998e-05</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1.7499999999999998e-05</iyy>
+            <iyz>0</iyz>
+            <izz>1.7499999999999998e-05</izz>
+          </inertia>
+        </inertial>
+        <visual name='wheel_sup_front_left_visual'>
+          <pose>0 0 0 0 0 -3.1415926535895866</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/sup_wheels.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='wheel_sup_front_left_joint' type='revolute'>
+        <child>wheel_sup_front_left</child>
+        <parent>base_link</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-inf</lower>
+            <upper>inf</upper>
+            <effort>inf</effort>
+            <velocity>inf</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+        <pose>-5.5511151231257827e-17 1.3877787807814457e-17 0 0 0 0</pose>
+      </joint>
+      <link name='front_left'>
+        <pose>-0.039999999999998259 -0.24499999999996902 -0.04999999999999994 1.0015640303657263e-16 -1.2660171293208635e-21 1.5707999999992928</pose>
+        <inertial>
+          <pose>0 0 0 0 1.5707963267948966 0</pose>
+          <mass>0.01</mass>
+          <inertia>
+            <ixx>1.7499999999999998e-05</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1.7499999999999998e-05</iyy>
+            <iyz>0</iyz>
+            <izz>3.1250000000000001e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='front_left_collision'>
+          <pose>0 0 0 0 1.5707963267948966 0</pose>
+          <geometry>
+            <cylinder>
+              <length>0.029999999999999999</length>
+              <radius>0.059999999999999998</radius>
+            </cylinder>
+          </geometry>
+          <max_contacts>5</max_contacts>
+          <surface>
+            <contact>
+              <ode>
+                <soft_cfm>1</soft_cfm>
+                <soft_erp>0.40000000000000002</soft_erp>
+                <kp>1000000</kp>
+                <kd>1</kd>
+                <min_depth>0.01</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>1.1599999999999999</mu>
+                <mu2>1.1599999999999999</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='front_left_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/wheel.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='front_left_joint' type='revolute'>
+        <child>front_left</child>
+        <parent>wheel_sup_front_left</parent>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>-inf</lower>
+            <upper>inf</upper>
+            <effort>inf</effort>
+            <velocity>inf</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.0001</damping>
+            <friction>0.5</friction>
+          </dynamics>
+        </axis>
+        <pose>-5.5511151231257827e-17 2.7755575615628914e-17 0 0 0 0</pose>
+      </joint>
+      <link name='wheel_sup_front_right'>
+        <pose>-8.8817841970012523e-16 0.24499999999999922 0.050000000000000003 2.0409133280060843e-26 -4.8312691768914163e-22 1.5707999999998588</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>0.01</mass>
+          <inertia>
+            <ixx>1.7499999999999998e-05</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1.7499999999999998e-05</iyy>
+            <iyz>0</iyz>
+            <izz>1.7499999999999998e-05</izz>
+          </inertia>
+        </inertial>
+        <visual name='wheel_sup_front_right_visual'>
+          <pose>0 0 0 0 0 -3.1415926535895866</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/sup_wheels.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='wheel_sup_front_right_joint' type='revolute'>
+        <child>wheel_sup_front_right</child>
+        <parent>base_link</parent>
+        <axis>
+          <xyz>-1.1754943508222875e-38 0 1</xyz>
+          <limit>
+            <lower>-inf</lower>
+            <upper>inf</upper>
+            <effort>inf</effort>
+            <velocity>inf</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+        <pose>5.5511151231257827e-17 -1.3877787807814457e-17 0 0 -1.1754943508222875e-38 0</pose>
+      </joint>
+      <link name='front_right'>
+        <pose>-0.040000000000000036 0.2450000000000081 -0.049999999999999961 -2.7782333373590551e-16 -1.0210256878586828e-21 1.5707999999998594</pose>
+        <inertial>
+          <pose>0 0 0 0 1.5707963267948966 0</pose>
+          <mass>0.01</mass>
+          <inertia>
+            <ixx>1.7499999999999998e-05</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1.7499999999999998e-05</iyy>
+            <iyz>0</iyz>
+            <izz>3.1250000000000001e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='front_right_collision'>
+          <pose>0 0 0 0 1.5707963267948966 0</pose>
+          <geometry>
+            <cylinder>
+              <length>0.029999999999999999</length>
+              <radius>0.059999999999999998</radius>
+            </cylinder>
+          </geometry>
+          <max_contacts>5</max_contacts>
+          <surface>
+            <contact>
+              <ode>
+                <soft_cfm>1</soft_cfm>
+                <soft_erp>0.40000000000000002</soft_erp>
+                <kp>1000000</kp>
+                <kd>1</kd>
+                <min_depth>0.01</min_depth>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>1.1599999999999999</mu>
+                <mu2>1.1599999999999999</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='front_right_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/wheel.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='front_right_joint' type='revolute'>
+        <child>front_right</child>
+        <parent>wheel_sup_front_right</parent>
+        <axis>
+          <xyz>1 0 -2.4651903288156619e-32</xyz>
+          <limit>
+            <lower>-inf</lower>
+            <upper>inf</upper>
+            <effort>inf</effort>
+            <velocity>inf</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.0001</damping>
+            <friction>0.5</friction>
+          </dynamics>
+        </axis>
+        <pose>8.3266726846886741e-17 0 0 0 2.4651903288156619e-32 0</pose>
+      </joint>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='shelf_big_0'>
+      <pose>-9.3417700000000004 -13.559799999999999 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <link name='shelf_big_base'>
+        <pose>-0.5 0 0 0 0 0</pose>
+        <collision name='shelf_big_chassi_collision'>
+          <pose>0 0 3 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2.1000000000000001 18 6</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='shelf_big_chassi_visual'>
+          <pose>0 0 0 0 0 1.57079632679</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/shelf_big_movai.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='shelf'>
+      <pose>-4.4152800000000001 -0.69098700000000002 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <link name='shelf_base'>
+        <pose>-0.5 0 0 0 0 0</pose>
+        <collision name='shelf_chassi_collision'>
+          <pose>0 0 0.90000000000000002 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>3.6000000000000001 0.59999999999999998 1.8</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='shelf_chassi_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.20000000000000001 0.29999999999999999 0.29999999999999999</scale>
+              <uri>meshes/shelf_big_movai.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='shelf_0'>
+      <pose>-4.4152800000000001 2.3069700000000002 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <link name='shelf_base'>
+        <pose>-0.5 0 0 0 0 0</pose>
+        <collision name='shelf_chassi_collision'>
+          <pose>0 0 0.90000000000000002 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>3.6000000000000001 0.59999999999999998 1.8</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='shelf_chassi_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.20000000000000001 0.29999999999999999 0.29999999999999999</scale>
+              <uri>meshes/shelf_big_movai.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='shelf_1'>
+      <pose>-4.4152800000000001 5.30708 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <link name='shelf_base'>
+        <pose>-0.5 0 0 0 0 0</pose>
+        <collision name='shelf_chassi_collision'>
+          <pose>0 0 0.90000000000000002 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>3.6000000000000001 0.59999999999999998 1.8</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='shelf_chassi_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.20000000000000001 0.29999999999999999 0.29999999999999999</scale>
+              <uri>meshes/shelf_big_movai.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='shelf_2'>
+      <pose>-4.4152800000000001 8.3435199999999998 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <link name='shelf_base'>
+        <pose>-0.5 0 0 0 0 0</pose>
+        <collision name='shelf_chassi_collision'>
+          <pose>0 0 0.90000000000000002 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>3.6000000000000001 0.59999999999999998 1.8</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='shelf_chassi_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.20000000000000001 0.29999999999999999 0.29999999999999999</scale>
+              <uri>meshes/shelf_big_movai.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='shelf_3'>
+      <pose>5.6014400000000002 8.3435199999999998 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <link name='shelf_base'>
+        <pose>-0.5 0 0 0 0 0</pose>
+        <collision name='shelf_chassi_collision'>
+          <pose>0 0 0.90000000000000002 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>3.6000000000000001 0.59999999999999998 1.8</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='shelf_chassi_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.20000000000000001 0.29999999999999999 0.29999999999999999</scale>
+              <uri>meshes/shelf_big_movai.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='shelf_4'>
+      <pose>5.6014400000000002 5.30708 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <link name='shelf_base'>
+        <pose>-0.5 0 0 0 0 0</pose>
+        <collision name='shelf_chassi_collision'>
+          <pose>0 0 0.90000000000000002 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>3.6000000000000001 0.59999999999999998 1.8</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='shelf_chassi_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.20000000000000001 0.29999999999999999 0.29999999999999999</scale>
+              <uri>meshes/shelf_big_movai.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='shelf_5'>
+      <pose>5.6014400000000002 -0.69098700000000002 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <link name='shelf_base'>
+        <pose>-0.5 0 0 0 0 0</pose>
+        <collision name='shelf_chassi_collision'>
+          <pose>0 0 0.90000000000000002 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>3.6000000000000001 0.59999999999999998 1.8</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='shelf_chassi_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.20000000000000001 0.29999999999999999 0.29999999999999999</scale>
+              <uri>meshes/shelf_big_movai.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='shelf_6'>
+      <pose>5.6014400000000002 2.3069700000000002 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <link name='shelf_base'>
+        <pose>-0.5 0 0 0 0 0</pose>
+        <collision name='shelf_chassi_collision'>
+          <pose>0 0 0.90000000000000002 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>3.6000000000000001 0.59999999999999998 1.8</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='shelf_chassi_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.20000000000000001 0.29999999999999999 0.29999999999999999</scale>
+              <uri>meshes/shelf_big_movai.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='pallet_box_mobile'>
+      <pose>4.4161000000000001 14.6952 -0.0050731888734463007 1.0589987283415926e-15 -4.2058286083157561e-15 -1.0904859404330291e-16</pose>
+      <self_collide>false</self_collide>
+      <link name='pallet_base'>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0.40000000000000002 0 0 0</pose>
+          <mass>200</mass>
+          <inertia>
+            <ixx>0.10000000000000001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.10000000000000001</iyy>
+            <iyz>0</iyz>
+            <izz>0.10000000000000001</izz>
+          </inertia>
+        </inertial>
+        <collision name='pallet_top_collision'>
+          <pose>0 0 0.125 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.80000000000000004 0.040000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.40000000000000002</mu>
+                <mu2>0.40000000000000002</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='pallet_center_collision'>
+          <pose>0 0 0.055 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.10000000000000001 0.10000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='pallet_left_collision'>
+          <pose>0 -0.34999999999999998 0.055 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.10000000000000001 0.10000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='pallet_right_collision'>
+          <pose>0 0.34999999999999998 0.055 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.10000000000000001 0.10000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='boxes_collision'>
+          <pose>0 0 0.64400000000000002 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.80000000000000004 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='pallet_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.ignitionrobotics.org/movai/models/pallet/2/meshes/pallet.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='boxes_visual'>
+          <pose>-0.053874999999999999 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.ignitionrobotics.org/movai/models/pallet_box_mobile/3/meshes/boxes.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <plugin name='ignition::gazebo::systems::PosePublisher' filename='ignition-gazebo-pose-publisher-system'>
+        <publish_link_pose>true</publish_link_pose>
+        <publish_collision_pose>false</publish_collision_pose>
+        <publish_visual_pose>false</publish_visual_pose>
+        <publish_nested_model_pose>true</publish_nested_model_pose>
+        <update_frequency>20</update_frequency>
+      </plugin>
+      <static>false</static>
+    </model>
+    <model name='pallet_box_mobile_0'>
+      <pose>4.4541500000000003 13.6212 -0.005073188873446358 -2.1292869298327494e-15 -3.2315114207182918e-15 4.9652130862398906e-18</pose>
+      <self_collide>false</self_collide>
+      <link name='pallet_base'>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0.40000000000000002 0 0 0</pose>
+          <mass>200</mass>
+          <inertia>
+            <ixx>0.10000000000000001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.10000000000000001</iyy>
+            <iyz>0</iyz>
+            <izz>0.10000000000000001</izz>
+          </inertia>
+        </inertial>
+        <collision name='pallet_top_collision'>
+          <pose>0 0 0.125 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.80000000000000004 0.040000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.40000000000000002</mu>
+                <mu2>0.40000000000000002</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='pallet_center_collision'>
+          <pose>0 0 0.055 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.10000000000000001 0.10000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='pallet_left_collision'>
+          <pose>0 -0.34999999999999998 0.055 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.10000000000000001 0.10000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='pallet_right_collision'>
+          <pose>0 0.34999999999999998 0.055 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.10000000000000001 0.10000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='boxes_collision'>
+          <pose>0 0 0.64400000000000002 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.80000000000000004 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='pallet_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.ignitionrobotics.org/movai/models/pallet/2/meshes/pallet.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='boxes_visual'>
+          <pose>-0.053874999999999999 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.ignitionrobotics.org/movai/models/pallet_box_mobile/3/meshes/boxes.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <plugin name='ignition::gazebo::systems::PosePublisher' filename='ignition-gazebo-pose-publisher-system'>
+        <publish_link_pose>true</publish_link_pose>
+        <publish_collision_pose>false</publish_collision_pose>
+        <publish_visual_pose>false</publish_visual_pose>
+        <publish_nested_model_pose>true</publish_nested_model_pose>
+        <update_frequency>20</update_frequency>
+      </plugin>
+      <static>false</static>
+    </model>
+    <model name='pallet_box_mobile_1'>
+      <pose>4.4467999999999996 12.228999999999999 -0.0050731888734463588 3.608927898194622e-16 -4.5237618264930404e-15 -5.6381775081642713e-16</pose>
+      <self_collide>false</self_collide>
+      <link name='pallet_base'>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0.40000000000000002 0 0 0</pose>
+          <mass>200</mass>
+          <inertia>
+            <ixx>0.10000000000000001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.10000000000000001</iyy>
+            <iyz>0</iyz>
+            <izz>0.10000000000000001</izz>
+          </inertia>
+        </inertial>
+        <collision name='pallet_top_collision'>
+          <pose>0 0 0.125 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.80000000000000004 0.040000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.40000000000000002</mu>
+                <mu2>0.40000000000000002</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='pallet_center_collision'>
+          <pose>0 0 0.055 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.10000000000000001 0.10000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='pallet_left_collision'>
+          <pose>0 -0.34999999999999998 0.055 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.10000000000000001 0.10000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='pallet_right_collision'>
+          <pose>0 0.34999999999999998 0.055 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.10000000000000001 0.10000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='boxes_collision'>
+          <pose>0 0 0.64400000000000002 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.80000000000000004 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='pallet_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.ignitionrobotics.org/movai/models/pallet/2/meshes/pallet.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='boxes_visual'>
+          <pose>-0.053874999999999999 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.ignitionrobotics.org/movai/models/pallet_box_mobile/3/meshes/boxes.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <plugin name='ignition::gazebo::systems::PosePublisher' filename='ignition-gazebo-pose-publisher-system'>
+        <publish_link_pose>true</publish_link_pose>
+        <publish_collision_pose>false</publish_collision_pose>
+        <publish_visual_pose>false</publish_visual_pose>
+        <publish_nested_model_pose>true</publish_nested_model_pose>
+        <update_frequency>20</update_frequency>
+      </plugin>
+      <static>false</static>
+    </model>
+    <model name='pallet_box'>
+      <pose>-6.1191300000000002 13.7079 0.01 0 0 0</pose>
+      <self_collide>false</self_collide>
+      <link name='pallet_base'>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0.40000000000000002 0 0 0</pose>
+          <mass>200</mass>
+          <inertia>
+            <ixx>0.10000000000000001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.10000000000000001</iyy>
+            <iyz>0</iyz>
+            <izz>0.10000000000000001</izz>
+          </inertia>
+        </inertial>
+        <collision name='pallet_top_collision'>
+          <pose>0 0 0.125 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.80000000000000004 0.040000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.40000000000000002</mu>
+                <mu2>0.40000000000000002</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='pallet_center_collision'>
+          <pose>0 0 0.055 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.10000000000000001 0.10000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='pallet_left_collision'>
+          <pose>0 -0.34999999999999998 0.055 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.10000000000000001 0.10000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='pallet_right_collision'>
+          <pose>0 0.34999999999999998 0.055 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.10000000000000001 0.10000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='boxes_collision'>
+          <pose>0 0 0.64400000000000002 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.80000000000000004 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='pallet_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.ignitionrobotics.org/movai/models/pallet/2/meshes/pallet.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='boxes_visual'>
+          <pose>-0.053874999999999999 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.ignitionrobotics.org/movai/models/pallet_box_mobile/3/meshes/boxes.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <plugin name='ignition::gazebo::systems::PosePublisher' filename='ignition-gazebo-pose-publisher-system'>
+        <publish_link_pose>true</publish_link_pose>
+        <publish_collision_pose>false</publish_collision_pose>
+        <publish_visual_pose>false</publish_visual_pose>
+        <publish_nested_model_pose>true</publish_nested_model_pose>
+        <update_frequency>20</update_frequency>
+      </plugin>
+      <static>true</static>
+    </model>
+    <model name='shelf_big_1'>
+      <pose>13.982100000000001 15.319000000000001 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <link name='shelf_big_base'>
+        <pose>-0.5 0 0 0 0 0</pose>
+        <collision name='shelf_big_chassi_collision'>
+          <pose>0 0 3 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2.1000000000000001 18 6</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='shelf_big_chassi_visual'>
+          <pose>0 0 0 0 0 1.57079632679</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/shelf_big_movai.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='shelf_big_2'>
+      <pose>6.1977700000000002 -12.964700000000001 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <link name='shelf_big_base'>
+        <pose>-0.5 0 0 0 0 0</pose>
+        <collision name='shelf_big_chassi_collision'>
+          <pose>0 0 3 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2.1000000000000001 18 6</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='shelf_big_chassi_visual'>
+          <pose>0 0 0 0 0 1.57079632679</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/shelf_big_movai.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='shelf_big_3'>
+      <pose>0.59437600000000002 -12.964700000000001 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <link name='shelf_big_base'>
+        <pose>-0.5 0 0 0 0 0</pose>
+        <collision name='shelf_big_chassi_collision'>
+          <pose>0 0 3 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2.1000000000000001 18 6</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='shelf_big_chassi_visual'>
+          <pose>0 0 0 0 0 1.57079632679</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/shelf_big_movai.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='shelf_big_4'>
+      <pose>-5.3628400000000003 -12.964700000000001 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <link name='shelf_big_base'>
+        <pose>-0.5 0 0 0 0 0</pose>
+        <collision name='shelf_big_chassi_collision'>
+          <pose>0 0 3 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>2.1000000000000001 18 6</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='shelf_big_chassi_visual'>
+          <pose>0 0 0 0 0 1.57079632679</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>meshes/shelf_big_movai.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='shelf_7'>
+      <pose>13.3818 -21.241599999999998 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <link name='shelf_base'>
+        <pose>-0.5 0 0 0 0 0</pose>
+        <collision name='shelf_chassi_collision'>
+          <pose>0 0 0.90000000000000002 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>3.6000000000000001 0.59999999999999998 1.8</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='shelf_chassi_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.20000000000000001 0.29999999999999999 0.29999999999999999</scale>
+              <uri>meshes/shelf_big_movai.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='shelf_8'>
+      <pose>13.3818 -19.002800000000001 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <link name='shelf_base'>
+        <pose>-0.5 0 0 0 0 0</pose>
+        <collision name='shelf_chassi_collision'>
+          <pose>0 0 0.90000000000000002 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>3.6000000000000001 0.59999999999999998 1.8</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='shelf_chassi_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.20000000000000001 0.29999999999999999 0.29999999999999999</scale>
+              <uri>meshes/shelf_big_movai.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='shelf_9'>
+      <pose>13.3818 -16.447800000000001 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <link name='shelf_base'>
+        <pose>-0.5 0 0 0 0 0</pose>
+        <collision name='shelf_chassi_collision'>
+          <pose>0 0 0.90000000000000002 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>3.6000000000000001 0.59999999999999998 1.8</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='shelf_chassi_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.20000000000000001 0.29999999999999999 0.29999999999999999</scale>
+              <uri>meshes/shelf_big_movai.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='shelf_10'>
+      <pose>13.3818 -14.1028 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <link name='shelf_base'>
+        <pose>-0.5 0 0 0 0 0</pose>
+        <collision name='shelf_chassi_collision'>
+          <pose>0 0 0.90000000000000002 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>3.6000000000000001 0.59999999999999998 1.8</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='shelf_chassi_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>0.20000000000000001 0.29999999999999999 0.29999999999999999</scale>
+              <uri>meshes/shelf_big_movai.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+    </model>
+    <model name='pallet_box_0'>
+      <pose>14.0222 -24.335000000000001 0.01 0 0 0</pose>
+      <self_collide>false</self_collide>
+      <link name='pallet_base'>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0.40000000000000002 0 0 0</pose>
+          <mass>200</mass>
+          <inertia>
+            <ixx>0.10000000000000001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.10000000000000001</iyy>
+            <iyz>0</iyz>
+            <izz>0.10000000000000001</izz>
+          </inertia>
+        </inertial>
+        <collision name='pallet_top_collision'>
+          <pose>0 0 0.125 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.80000000000000004 0.040000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.40000000000000002</mu>
+                <mu2>0.40000000000000002</mu2>
+              </ode>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='pallet_center_collision'>
+          <pose>0 0 0.055 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.10000000000000001 0.10000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='pallet_left_collision'>
+          <pose>0 -0.34999999999999998 0.055 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.10000000000000001 0.10000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='pallet_right_collision'>
+          <pose>0 0.34999999999999998 0.055 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.10000000000000001 0.10000000000000001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='boxes_collision'>
+          <pose>0 0 0.64400000000000002 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.22 0.80000000000000004 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='pallet_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.ignitionrobotics.org/movai/models/pallet/2/meshes/pallet.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <visual name='boxes_visual'>
+          <pose>-0.053874999999999999 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.ignitionrobotics.org/movai/models/pallet_box_mobile/3/meshes/boxes.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <plugin name='ignition::gazebo::systems::PosePublisher' filename='ignition-gazebo-pose-publisher-system'>
+        <publish_link_pose>true</publish_link_pose>
+        <publish_collision_pose>false</publish_collision_pose>
+        <publish_visual_pose>false</publish_visual_pose>
+        <publish_nested_model_pose>true</publish_nested_model_pose>
+        <update_frequency>20</update_frequency>
+      </plugin>
+      <static>true</static>
+    </model>
+    <model name='MetalCabinet'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-14.607794761657715 -0.96105468273162842 0 0 0 1.5752799965479238</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='MetalCabinet_0'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-14.677497863769531 -9.6372413635253906 -0.0065541672520339489 -0.010172400228564376 1.0415881161781412e-05 1.5718199497768055</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='MetalCabinet_1'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-11.787307739257812 -24.658487319946289 0 0 0 -3.1194700004981151</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='MetalCabinet_2'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-14.642264366149902 -12.38402271270752 0 0 0 1.5584699815562093</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='MetalCabinet_3'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-14.627750396728516 -15.162844657897949 0 0 0 1.5723499440971542</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='MetalCabinet_4'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>14.580039978027344 -11.195867538452148 0 0 0 -1.5528599897696438</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='MetalCabinet_5'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>14.545360565185547 -10.173802375793457 0 0 0 -1.555890028953038</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='MetalCabinet_6'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>14.575441360473633 -9.0594797134399414 0.0020471347961574793 0.033747301483609139 -0.00085401693269485297 -1.5642800702309123</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='MetalCabinet_7'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>7.84375 24.597251892089844 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='MetalCabinet_8'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>6.794865608215332 24.522499084472656 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='MetalCabinet_9'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>5.7580657005310059 24.520999908447266 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='MetalCabinet_10'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-8.1098804473876953 24.565624237060547 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='MetalCabinet_11'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-9.1872396469116211 24.498800277709961 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='MetalCabinet_12'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-7.0165185928344727 24.582799911499023 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='cardboard_box'>
+      <pose>-14.596 -7.5171999999999999 0.14999799999999999 -1.2669099999999999e-18 -5.5101900000000001e-17 -2.88337e-18</pose>
+      <link name='link'>
+        <inertial>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.041666666999999998</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.056666666999999997</iyy>
+            <iyz>0</iyz>
+            <izz>0.068333332999999996</izz>
+          </inertia>
+          <pose>0 0 0 0 0 0</pose>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.5 0.40000000000000002 0.29999999999999999</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>10000000</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+                <max_vel>0.10000000000000001</max_vel>
+              </ode>
+            </contact>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 -0.14999999999999999 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3/meshes/cardboard_box.dae</uri>
+              <scale>1.2593189600000001 1.0074551679999999 0.75559137600000004</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='cardboard_box_0'>
+      <pose>-11.1797 -8.6043500000000002 0.14999799999999999 -5.6147899999999996e-20 5.4465499999999997e-17 4.69536e-18</pose>
+      <link name='link'>
+        <inertial>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.041666666999999998</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.056666666999999997</iyy>
+            <iyz>0</iyz>
+            <izz>0.068333332999999996</izz>
+          </inertia>
+          <pose>0 0 0 0 0 0</pose>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.5 0.40000000000000002 0.29999999999999999</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>10000000</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+                <max_vel>0.10000000000000001</max_vel>
+              </ode>
+            </contact>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 -0.14999999999999999 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3/meshes/cardboard_box.dae</uri>
+              <scale>1.2593189600000001 1.0074551679999999 0.75559137600000004</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='cardboard_box_1'>
+      <pose>-11.1874 -7.9485999999999999 0.14999799999999999 6.6207700000000002e-17 -1.2862400000000001e-18 6.9643000000000008e-18</pose>
+      <link name='link'>
+        <inertial>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.041666666999999998</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.056666666999999997</iyy>
+            <iyz>0</iyz>
+            <izz>0.068333332999999996</izz>
+          </inertia>
+          <pose>0 0 0 0 0 0</pose>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.5 0.40000000000000002 0.29999999999999999</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>10000000</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+                <max_vel>0.10000000000000001</max_vel>
+              </ode>
+            </contact>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 -0.14999999999999999 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3/meshes/cardboard_box.dae</uri>
+              <scale>1.2593189600000001 1.0074551679999999 0.75559137600000004</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='Construction Cone'>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>14.6434 -23.447900000000001 -2.6624964201014306e-09 2.207869302752313e-17 -2.575630649633229e-17 2.2846474327964485e-26</pose>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='Construction Cone_0'>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>13.965299999999999 -23.4468 -2.6624964201014306e-09 2.1961599184204769e-17 -2.5725949161835202e-17 2.2679699825113634e-26</pose>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='Construction Cone_1'>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-14.631600000000001 10.4244 -2.6624964202402083e-09 2.1991956866693544e-17 -2.5777990870525143e-17 2.2705206365153455e-26</pose>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='Construction Cone_2'>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-14.619400000000001 10.9975 -2.6624964202402083e-09 2.1957262366693545e-17 -2.5613192170525146e-17 2.2698326796165968e-26</pose>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='Construction Cone_3'>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-14.613 11.5832 -2.6624964203789861e-09 2.1740421718833192e-17 -2.5539466366245842e-17 2.2641461857490843e-26</pose>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='Construction Cone_4'>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-14.6282 9.8574599999999997 -2.6624964202402083e-09 2.2178439805732603e-17 -2.5934115896463633e-17 2.2785968258490411e-26</pose>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='BedsideTable2'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable2/2/meshes/BedsideTable2.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable2/2/meshes/BedsideTable2_Col.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-1.2894400358200073 -8.5035295486450195 0 0 0 -1.650303272034626</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='BedsideTable2_0'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable2/2/meshes/BedsideTable2.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable2/2/meshes/BedsideTable2_Col.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-4.520899772644043 -13.130200386047363 0 0 0 1.6424805348826506</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='BedsideTable2_1'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable2/2/meshes/BedsideTable2.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable2/2/meshes/BedsideTable2_Col.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-1.3115099668502808 -17.466400146484375 0 0 0 -1.5612088936478354</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='BedsideTable2_2'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable2/2/meshes/BedsideTable2.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable2/2/meshes/BedsideTable2_Col.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-5.7624599999999999 -22.3581 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='BedsideTable2_3'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable2/2/meshes/BedsideTable2.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable2/2/meshes/BedsideTable2_Col.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>0.118288 -22.4087 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='BedsideTable2_4'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable2/2/meshes/BedsideTable2.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable2/2/meshes/BedsideTable2_Col.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>5.7408299999999999 -22.303100000000001 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='MetalCabinet_13'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2/meshes/MetalCabinet.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>14.176300048828125 -17.870100021362305 0 0 0 -1.5444029519548732</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='aws_robomaker_warehouse_ClutteringD_01'>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>meshes/aws_robomaker_warehouse_ClutteringD_01_collision.DAE</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.59999999999999998</mu>
+                <mu2>0.59999999999999998</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+              <torsional>
+                <coefficient>1</coefficient>
+                <patch_radius>0</patch_radius>
+                <surface_radius>0</surface_radius>
+                <use_patch_radius>true</use_patch_radius>
+                <ode>
+                  <slip>0</slip>
+                </ode>
+              </torsional>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>meshes/aws_robomaker_warehouse_ClutteringD_01_visual.DAE</uri>
+            </mesh>
+          </geometry>
+          <meta>
+            <layer>1</layer>
+          </meta>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+      <pose>14.211400032043457 -4.9252400398254395 -0.29549399018287659 0 0 -3.1266163999224479</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='aws_robomaker_warehouse_ClutteringD_01_0'>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>meshes/aws_robomaker_warehouse_ClutteringD_01_collision.DAE</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.59999999999999998</mu>
+                <mu2>0.59999999999999998</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+              <torsional>
+                <coefficient>1</coefficient>
+                <patch_radius>0</patch_radius>
+                <surface_radius>0</surface_radius>
+                <use_patch_radius>true</use_patch_radius>
+                <ode>
+                  <slip>0</slip>
+                </ode>
+              </torsional>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>meshes/aws_robomaker_warehouse_ClutteringD_01_visual.DAE</uri>
+            </mesh>
+          </geometry>
+          <meta>
+            <layer>1</layer>
+          </meta>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+      <pose>14.184800148010254 -3.289330005645752 -0.30706900358200073 0 0 -3.1273600002519815</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='aws_robomaker_warehouse_ClutteringD_01_1'>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>meshes/aws_robomaker_warehouse_ClutteringD_01_collision.DAE</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.59999999999999998</mu>
+                <mu2>0.59999999999999998</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+              <torsional>
+                <coefficient>1</coefficient>
+                <patch_radius>0</patch_radius>
+                <surface_radius>0</surface_radius>
+                <use_patch_radius>true</use_patch_radius>
+                <ode>
+                  <slip>0</slip>
+                </ode>
+              </torsional>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>meshes/aws_robomaker_warehouse_ClutteringD_01_visual.DAE</uri>
+            </mesh>
+          </geometry>
+          <meta>
+            <layer>1</layer>
+          </meta>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+      <pose>13.042900085449219 -3.2752799987792969 -0.29561701416969299 0.0029231750661265167 2.2490054171200521e-11 3.1336399994691231</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='aws_robomaker_warehouse_ClutteringD_01_2'>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>meshes/aws_robomaker_warehouse_ClutteringD_01_collision.DAE</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.59999999999999998</mu>
+                <mu2>0.59999999999999998</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+              <torsional>
+                <coefficient>1</coefficient>
+                <patch_radius>0</patch_radius>
+                <surface_radius>0</surface_radius>
+                <use_patch_radius>true</use_patch_radius>
+                <ode>
+                  <slip>0</slip>
+                </ode>
+              </torsional>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>meshes/aws_robomaker_warehouse_ClutteringD_01_visual.DAE</uri>
+            </mesh>
+          </geometry>
+          <meta>
+            <layer>1</layer>
+          </meta>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+      <pose>14.171299934387207 -1.6848100423812866 -0.30365899205207825 0 0 3.1396799999262415</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/metalcabinet/2</uri>
+      <name>MetalCabinet_14</name>
+      <pose>14.593365669250488 -12.310633659362793 0 0 0 -1.5714099849004601</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3</uri>
+      <name>Construction Cone_5</name>
+      <pose>7.6414837210876776 -12.303801632705602 -1.3379350696784976e-09 5.6378512969246232e-20 -7.8062556418956316e-20 -2.2005254247393223e-39</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3</uri>
+      <name>Construction Cone_6</name>
+      <pose>7.5852223403984933 -9.2904135749930283 -1.3379350696784976e-09 4.336808689942018e-20 -3.9031278209478158e-20 -8.4635593259204694e-40</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable/2</uri>
+      <name>BedsideTable</name>
+      <pose>14.517200469970767 -14.85000038146973 0.00017961108768670936 -1.4985376195715072e-10 1.7196983103492788e-08 3.1329633707602271</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable/2</uri>
+      <name>BedsideTable_0</name>
+      <pose>14.523500442504947 -15.777500152587894 0.00017961208172859969 2.8835190777314184e-11 1.71977060110375e-08 -3.1399366850277559</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3</uri>
+      <name>cardboard_box_2</name>
+      <pose>14.570765490123184 -19.633082065580883 0.14999791649979879 1.8296129007024245e-17 4.1732004926731436e-17 6.3858454048788089e-18</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3</uri>
+      <name>cardboard_box_3</name>
+      <pose>13.89791077112957 -19.622049388462511 0.14999791649979879 5.7318664536314236e-18 4.9807121574472779e-17 7.8945810902950141e-18</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3</uri>
+      <name>cardboard_box_4</name>
+      <pose>13.200575977439815 -19.625893866352115 0.14999791649979874 -1.3012472375977884e-18 5.6035109630950432e-17 4.9232673171437635e-18</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable/2</uri>
+      <name>BedsideTable_1</name>
+      <pose>2.9969732910345499 20.522545576961537 0.00017960779013447321 -7.7830404825469691e-13 -1.7549193330596869e-08 -6.4392867135218044e-15</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable/2</uri>
+      <name>BedsideTable_2</name>
+      <pose>-10.145226471493844 19.182555064718585 0.00017960779013446963 -7.7829679811463344e-13 -1.7549193325639549e-08 5.1070327425162083e-15</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/aws_robomaker_warehouse_clutteringd_01/4</uri>
+      <name>aws_robomaker_warehouse_ClutteringD_01_3</name>
+      <pose>-13.902099609375 21.628599166870117 -0.28243163228034973 0 0 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/aws_robomaker_warehouse_clutteringd_01/4</uri>
+      <name>aws_robomaker_warehouse_ClutteringD_01_4</name>
+      <pose>-14.203800201416016 3.4948499202728271 -0.32398644089698792 0 0 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3</uri>
+      <name>cardboard_box_5</name>
+      <pose>-14.462460624191435 5.3369106337570251 0.14999791649979885 -8.0319179945750712e-19 -5.3049021167498681e-17 -1.1627145476617046e-18</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3</uri>
+      <name>cardboard_box_6</name>
+      <pose>-13.584065900483466 4.7748390607691924 0.14999791649979891 -1.3937505726093802e-18 -5.4302851365305106e-17 -2.4841411284043052e-18</pose>
+    </include>
+    <include>
+      <uri>file:///opt/ros/jazzy/share/turtlebot3_gazebo/models/turtlebot3_waffle</uri>
+      <name>waffle</name>
+      <pose>-5.6956683942111518e-05 1.4195577693774848e-09 0.010006648658046019 -1.3998646837645625e-07 -0.0056888604352521238 -6.675278128292307e-09</pose>
+    </include>
+    <model name='cardboard_box_7'>
+      <pose>10.653671172743572 -16.369420344323732 0.14999799430370331 -1.2669100329813703e-18 -5.5101898660113541e-17 -2.8833700492153991e-18</pose>
+      <link name='link'>
+        <inertial>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.041666666999999998</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.056666666999999997</iyy>
+            <iyz>0</iyz>
+            <izz>0.068333332999999996</izz>
+          </inertia>
+          <pose>0 0 0 0 0 0</pose>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.5 0.40000000000000002 0.29999999999999999</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>10000000</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+                <max_vel>0.10000000000000001</max_vel>
+              </ode>
+            </contact>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 -0.14999999999999999 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3/meshes/cardboard_box.dae</uri>
+              <scale>1.2593189600000001 1.0074551679999999 0.75559137600000004</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='cardboard_box_8'>
+      <pose>-7.1471110035348202 -20.213358597877537 0.14999799430370331 -1.2669100329813703e-18 -5.5101898660113541e-17 -2.8833700492153991e-18</pose>
+      <link name='link'>
+        <inertial>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.041666666999999998</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.056666666999999997</iyy>
+            <iyz>0</iyz>
+            <izz>0.068333332999999996</izz>
+          </inertia>
+          <pose>0 0 0 0 0 0</pose>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.5 0.40000000000000002 0.29999999999999999</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>10000000</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+                <max_vel>0.10000000000000001</max_vel>
+              </ode>
+            </contact>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 -0.14999999999999999 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3/meshes/cardboard_box.dae</uri>
+              <scale>1.2593189600000001 1.0074551679999999 0.75559137600000004</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='cardboard_box_9'>
+      <pose>-7.1496717833368377 -19.780100489725466 0.14999799430370331 -1.2669100329813703e-18 -5.5101898660113541e-17 -2.8833700492153991e-18</pose>
+      <link name='link'>
+        <inertial>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.041666666999999998</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.056666666999999997</iyy>
+            <iyz>0</iyz>
+            <izz>0.068333332999999996</izz>
+          </inertia>
+          <pose>0 0 0 0 0 0</pose>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.5 0.40000000000000002 0.29999999999999999</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>10000000</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+                <max_vel>0.10000000000000001</max_vel>
+              </ode>
+            </contact>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 -0.14999999999999999 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3/meshes/cardboard_box.dae</uri>
+              <scale>1.2593189600000001 1.0074551679999999 0.75559137600000004</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='BedsideTable2_5'>
+      <static>true</static>
+      <link name='body'>
+        <pose>0 0 0 0 0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable2/2/meshes/BedsideTable2.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable2/2/meshes/BedsideTable2_Col.obj</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-7.1913263990114933 -11.280053565085604 0 0 0 -1.6503002650201182</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/aws_robomaker_warehouse_clutteringd_01/4</uri>
+      <name>aws_robomaker_warehouse_ClutteringD_01_4_1</name>
+      <pose>-14.385241760935369 -20.647073870347985 -0.3239859938621521 0 0 0</pose>
+    </include>
+    <model name='aws_robomaker_warehouse_ClutteringD_01_5'>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>meshes/aws_robomaker_warehouse_ClutteringD_01_collision.DAE</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.59999999999999998</mu>
+                <mu2>0.59999999999999998</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+              <torsional>
+                <coefficient>1</coefficient>
+                <patch_radius>0</patch_radius>
+                <surface_radius>0</surface_radius>
+                <use_patch_radius>true</use_patch_radius>
+                <ode>
+                  <slip>0</slip>
+                </ode>
+              </torsional>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>meshes/aws_robomaker_warehouse_ClutteringD_01_visual.DAE</uri>
+            </mesh>
+          </geometry>
+          <meta>
+            <layer>1</layer>
+          </meta>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+      <pose>3.998372338207917 -17.557789278705378 -0.29549399018287659 0 0 -3.1266200003145483</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='cardboard_box_7_1'>
+      <pose>4.2356182703603977 -16.568428545112432 0.14999799430370331 -1.2669100329813703e-18 -5.5101898660113541e-17 -2.8833700492153991e-18</pose>
+      <link name='link'>
+        <inertial>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.041666666999999998</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.056666666999999997</iyy>
+            <iyz>0</iyz>
+            <izz>0.068333332999999996</izz>
+          </inertia>
+          <pose>0 0 0 0 0 0</pose>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.5 0.40000000000000002 0.29999999999999999</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>10000000</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+                <max_vel>0.10000000000000001</max_vel>
+              </ode>
+            </contact>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 -0.14999999999999999 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3/meshes/cardboard_box.dae</uri>
+              <scale>1.2593189600000001 1.0074551679999999 0.75559137600000004</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='cardboard_box_7_2'>
+      <pose>1.4815575214337002 -8.2638545174530957 0.14999799430370331 -1.2669100329813703e-18 -5.5101898660113541e-17 -2.8833700492153991e-18</pose>
+      <link name='link'>
+        <inertial>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.041666666999999998</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.056666666999999997</iyy>
+            <iyz>0</iyz>
+            <izz>0.068333332999999996</izz>
+          </inertia>
+          <pose>0 0 0 0 0 0</pose>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.5 0.40000000000000002 0.29999999999999999</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>10000000</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+                <max_vel>0.10000000000000001</max_vel>
+              </ode>
+            </contact>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 -0.14999999999999999 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3/meshes/cardboard_box.dae</uri>
+              <scale>1.2593189600000001 1.0074551679999999 0.75559137600000004</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='cardboard_box_7_3'>
+      <pose>1.458636802425866 -9.0172296304467388 0.14999799430370331 -1.2669100329813703e-18 -5.5101898660113541e-17 -2.8833700492153991e-18</pose>
+      <link name='link'>
+        <inertial>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.041666666999999998</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.056666666999999997</iyy>
+            <iyz>0</iyz>
+            <izz>0.068333332999999996</izz>
+          </inertia>
+          <pose>0 0 0 0 0 0</pose>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.5 0.40000000000000002 0.29999999999999999</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>10000000</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+                <max_vel>0.10000000000000001</max_vel>
+              </ode>
+            </contact>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 -0.14999999999999999 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3/meshes/cardboard_box.dae</uri>
+              <scale>1.2593189600000001 1.0074551679999999 0.75559137600000004</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='cardboard_box_7_4'>
+      <pose>1.686561568657873 -5.5501808713726248 0.14999799430370331 -1.2669100329813703e-18 -5.5101898660113541e-17 -2.8833700492153991e-18</pose>
+      <link name='link'>
+        <inertial>
+          <mass>2</mass>
+          <inertia>
+            <ixx>0.041666666999999998</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.056666666999999997</iyy>
+            <iyz>0</iyz>
+            <izz>0.068333332999999996</izz>
+          </inertia>
+          <pose>0 0 0 0 0 0</pose>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.5 0.40000000000000002 0.29999999999999999</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>10000000</kp>
+                <kd>1</kd>
+                <min_depth>0.001</min_depth>
+                <max_vel>0.10000000000000001</max_vel>
+              </ode>
+            </contact>
+            <bounce/>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <pose>0 0 -0.14999999999999999 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3/meshes/cardboard_box.dae</uri>
+              <scale>1.2593189600000001 1.0074551679999999 0.75559137600000004</scale>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>true</static>
+      <self_collide>false</self_collide>
+    </model>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable/2</uri>
+      <name>BedsideTable_0_1</name>
+      <pose>11.97485066331183 15.328378936853063 0.0001796120050130412 2.8834644255309081e-11 1.7197701129072012e-08 -3.1399400648623543</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable/2</uri>
+      <name>BedsideTable_0_2</name>
+      <pose>11.862123952180097 10.975592646176885 0.0001796120050130412 2.8834644255309081e-11 1.7197701129072012e-08 -3.1399400648623543</pose>
+    </include>
+    <model name='Construction Cone_4_1'>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-1.1028674311576661 24.514207191568175 -3.9738096455077536e-09 6.5611538700746547e-17 -7.700869668716595e-17 1.12755317413132e-25</pose>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='Construction Cone_4_1_1'>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-0.43042725696807649 24.559990564901845 -5.1343823770366731e-09 1.6097955663363299e-09 -1.0894577454805233e-09 8.8069401973983601e-20</pose>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='Construction Cone_4_1_2'>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-0.77113878017392135 23.812705202942229 -5.1343823770366731e-09 1.6097955663363299e-09 -1.0894577454805233e-09 8.8069401949749625e-20</pose>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='Construction Cone_4_1_3'>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>12.162315074255748 22.720610222308707 -5.1343823770366731e-09 1.6097955663363299e-09 -1.0894577454805233e-09 8.8069401836658633e-20</pose>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='Construction Cone_2_1'>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>-2.7964349391669927 5.3223261901909309 -3.9738096455077536e-09 6.5177934660287721e-17 -7.6666111233798751e-17 1.1254142946616728e-25</pose>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='Construction Cone_2_2'>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>10 10 10</scale>
+              <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/meshes/construction_cone.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>2.97957620899468 2.4156174814487898 -3.9738096456465313e-09 6.5216965938497188e-17 -7.6752847407597562e-17 1.1270315060722965e-25</pose>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3</uri>
+      <name>cardboard_box_6_1</name>
+      <pose>2.9942141359764136 8.4086680649134831 0.14999799430370331 -1.3937500115078282e-18 -5.430289843666897e-17 -2.4841400119631121e-18</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3</uri>
+      <name>cardboard_box_6_2</name>
+      <pose>-2.7722733728447886 -0.75126168496784906 0.14999799430370331 -1.3937500115078282e-18 -5.430289843666897e-17 -2.4841400119631121e-18</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/aws_robomaker_warehouse_clutteringd_01/4</uri>
+      <name>aws_robomaker_warehouse_ClutteringD_01_3_1</name>
+      <pose>-3.4095719327865588 12.03149158788321 -0.28243198990821838 0 0 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable/2</uri>
+      <name>BedsideTable_1_1</name>
+      <pose>-2.0509530979137143 17.216011490143174 0.0001796080032363534 -7.7830401622626339e-13 -1.7549199426980515e-08 -6.4392867135197115e-15</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3</uri>
+      <name>cardboard_box_6_2_1</name>
+      <pose>7.2017595617760515 2.3425565995831938 0.14999799430370331 -1.3937500115078282e-18 -5.430289843666897e-17 -2.4841400119631121e-18</pose>
+    </include>
+    <include>
+      <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cardboard box/3</uri>
+      <name>cardboard_box_6_2_2</name>
+      <pose>-7.1120196580775339 5.3590313349276482 0.14999799430370331 -1.3937500115078282e-18 -5.430289843666897e-17 -2.4841400119631121e-18</pose>
+    </include>
+    <light name='sun' type='directional'>
+      <pose>-5 -3 10 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <intensity>1</intensity>
+      <direction>0 0 -1</direction>
+      <diffuse>1 1 1 1</diffuse>
+      <specular>1 1 1 1</specular>
+      <attenuation>
+        <range>10</range>
+        <linear>1</linear>
+        <constant>1</constant>
+        <quadratic>0</quadratic>
+      </attenuation>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
+    </light>
+  </world>
+</sdf>

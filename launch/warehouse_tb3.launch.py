@@ -119,18 +119,25 @@ def generate_launch_description():
     ld = LaunchDescription()
     ld.add_action(DeclareLaunchArgument('x_pose', default_value='0.0'))
     ld.add_action(DeclareLaunchArgument('y_pose', default_value='0.0'))
-    ld.add_action(gzserver_cmd)
-    ld.add_action(gzclient_cmd)
-    ld.add_action(robot_state_publisher_cmd)
-    ld.add_action(spawn_turtlebot_cmd)
-    ld.add_action(start_gazebo_ros_bridge_cmd)
+
+    # IMPORTANTE: las variables de entorno deben añadirse ANTES de arrancar
+    # Gazebo. Las acciones de launch se ejecutan en orden, y cada proceso
+    # captura el entorno en el momento de su arranque. Si los Append van
+    # después de gzserver_cmd, el servidor nunca los ve y los meshes con
+    # URI relativa (meshes/*.dae) no se resuelven (Error Code 14 -> 9).
+    ld.add_action(set_env_vars_resources)  # modelos del TurtleBot3
     ld.add_action(AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', '/home/bran/.gz/fuel/fuel.ignitionrobotics.org/openrobotics/models/warehouse/5'))
     ld.add_action(AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', '/home/bran/.gz/fuel/fuel.ignitionrobotics.org/movai/models/shelf_big/2'))
     ld.add_action(AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', '/home/bran/.gz/fuel/fuel.ignitionrobotics.org/movai/models/shelf/1'))
     ld.add_action(AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', '/home/bran/.gz/fuel/fuel.ignitionrobotics.org/movai/models/cart_model_2/2'))
     ld.add_action(AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', '/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/aws_robomaker_warehouse_clutteringd_01/4'))
+
+    ld.add_action(gzserver_cmd)
+    ld.add_action(gzclient_cmd)
+    ld.add_action(robot_state_publisher_cmd)
+    ld.add_action(spawn_turtlebot_cmd)
+    ld.add_action(start_gazebo_ros_bridge_cmd)
     if TURTLEBOT3_MODEL != 'burger':
         ld.add_action(start_gazebo_ros_image_bridge_cmd)
-    ld.add_action(set_env_vars_resources)
 
     return ld
