@@ -95,3 +95,91 @@ Esto genera `mapa_tfg_semi_3.pgm` (imagen del mapa) y `mapa_tfg_semi_3.yaml`
 (metadatos: resolución 0.05 m/celda y origen). El mapa validado para navegación
 es `maps/mapa_tfg_semi_3`; los demás archivos de `maps/` son iteraciones
 previas del proceso de ajuste, conservadas como evidencia.
+
+
+## Postprocesado del mapa
+
+El mapa crudo de SLAM Toolbox contiene valores de gris intermedios (bordes
+difusos, celdas semi-observadas). El script `scripts/limpiar_mapas.py` lo
+reasigna a los tres valores trinarios que espera Nav2 (0 ocupado, 205
+desconocido, 254 libre), con criterio conservador: los valores intermedios
+caen a desconocido, nunca a libre, para no crear zonas transitables falsas.
+
+```
+python3 scripts/limpiar_mapas.py maps/mapa_tfg_semi_3.pgm maps/mapa_tfg_semi_3_limpio.pgm
+```
+
+El `.yaml` del mapa limpio es una copia del original apuntando al nuevo `.pgm`.
+**El mapa validado para navegación es `maps/mapa_tfg_semi_3_limpio`.**
+
+
+## Navegación autónoma (Nav2)
+
+Con la simulación base lanzada (`warehouse_tb3.launch.py`) y ya cargada del
+todo (el almacén renderizado y el robot respondiendo), en otra terminal:
+
+```
+ros2 launch turtlebot3_navigation2 navigation2.launch.py \
+  use_sim_time:=true \
+  map:=$HOME/TFG/maps/mapa_tfg_semi_3_limpio.yaml \
+  params_file:=$HOME/TFG/config/nav2_params_warehouse.yaml
+```
+
+`config/nav2_params_warehouse.yaml` parte del `waffle.yaml` del paquete
+`turtlebot3_navigation2`, con este cambio clave:
+
+- `set_initial_pose: true` con pose `(0, 0, yaw 0)` — AMCL publica la
+  transform `map→odom` desde el arranque, sin esperar a un "2D Pose
+  Estimate" manual en RViz. Sin esto, el costmap global no puede activarse
+  (necesita esa transform), el lifecycle manager agota su timeout y deja
+  `bt_navigator` y el resto de nodos en estado `inactive`: los goals se
+  rechazan con "Action server is inactive".
+  **Si se cambia el punto de spawn del robot en el launch, hay que
+  actualizar esta pose (en coordenadas del frame `map`).**
+
+### Verificación de arranque correcto
+
+En el log deben aparecer, para AMBOS managers:
+
+```
+[lifecycle_manager_localization]: Managed nodes are active
+[lifecycle_manager_navigation]: Managed nodes are active
+```
+
+Solo entonces el sistema acepta goals. Uso: botón "Nav2 Goal" en RViz →
+clic en destino → arrastrar para fijar orientación. El robot planifica la
+ruta global (línea sobre el mapa) y la sigue esquivando obstáculos con el
+costmap local.
+
+### Recuperación sin relanzar
+
+Si la pila quedó en `inactive` (goals rechazados), se puede reintentar la
+secuencia de activación sin cerrar nada:
+
+```
+ros2 service call /lifecycle_manager_navigation/manage_nodes \
+  nav2_msgs/srv/ManageLifecycleNodes "{command: 0}"
+```
+
+Comprobar el estado de un nodo concreto: `ros2 lifecycle get /bt_navigator`
+(debe devolver `active`).
+
+### Notas de log (benignas)
+
+- `RTPS_TRANSPORT_SHM Error ... open_and_lock_file failed`: restos de
+  memoria compartida DDS de sesiones anteriores; Fast DDS usa UDP local
+  como alternativa. Sin efecto.
+- `incompatible QoS (/particle_cloud)`: discrepancia de QoS entre RViz y
+  AMCL en la visualización de partículas. Sin efecto en la navegación.
+- `Message Filter dropping message` en RViz durante los primeros segundos:
+  desaparecen en cuanto AMCL publica `map→odom`.
+
+
+## Limpieza de emergencia
+
+`scripts/reinicio_simuladores.sh` mata todos los procesos de simulación
+(`pkill -9`) y reinicia el daemon de ROS2. **Es el botón de emergencia, no
+el procedimiento estándar**: el cierre normal sigue siendo Ctrl+C en orden
+inverso al lanzamiento (teleop → RViz/Nav2 → SLAM → Gazebo), esperando el
+prompt en cada paso. Usar el script solo cuando queden procesos zombi
+(síntoma típico: dos publishers en `ros2 topic info /clock --verbose`). 
