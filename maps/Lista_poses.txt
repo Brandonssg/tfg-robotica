@@ -1,0 +1,145 @@
+Lista poses:
+
+Cajas Para Entrega (Pasillo 1):
+bran@bran:~$ ros2 run tf2_ros tf2_echo map base_footprint
+[INFO] [1784550991.805488453] [tf2_echo]: Waiting for transform map ->  base_footprint: Invalid frame ID "map" passed to canTransform argument target_frame - frame does not exist
+[INFO] [1784550993.789946226] [tf2_echo]: Waiting for transform map ->  base_footprint: Invalid frame ID "map" passed to canTransform argument target_frame - frame does not exist
+[INFO] [1784550995.789845234] [tf2_echo]: Waiting for transform map ->  base_footprint: Invalid frame ID "map" passed to canTransform argument target_frame - frame does not exist
+At time 716.360000000
+- Translation: [5.860, -2.820, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, -0.043, 0.999]
+- Rotation: in RPY (radian) [0.000, 0.000, -0.087]
+- Rotation: in RPY (degree) [0.000, 0.000, -4.967]
+- Matrix:
+  0.996  0.087  0.000  5.860
+ -0.087  0.996 -0.000 -2.820
+ -0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+
+--------------------------------------------
+  
+  Pasillo 1, Estanterias Carritos:
+  bran@bran:~$ ros2 run tf2_ros tf2_echo map base_footprint
+[INFO] [1784551110.644314439] [tf2_echo]: Waiting for transform map ->  base_footprint: Invalid frame ID "map" passed to canTransform argument target_frame - frame does not exist
+[INFO] [1784551112.628482541] [tf2_echo]: Waiting for transform map ->  base_footprint: Invalid frame ID "map" passed to canTransform argument target_frame - frame does not exist
+At time 833.160000000
+- Translation: [9.853, -14.882, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, -0.001, 1.000]
+- Rotation: in RPY (radian) [0.000, 0.000, -0.002]
+- Rotation: in RPY (degree) [0.000, 0.000, -0.096]
+- Matrix:
+  1.000  0.002  0.000  9.853
+ -0.002  1.000 -0.000 -14.882
+ -0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+
+  
+--------------------------------------------
+  
+  Caja Grande Pasillo 2:
+  bran@bran:~$ ros2 run tf2_ros tf2_echo map base_footprint
+[INFO] [1784551274.142383720] [tf2_echo]: Waiting for transform map ->  base_footprint: Invalid frame ID "map" passed to canTransform argument target_frame - frame does not exist
+At time 994.580000000
+- Translation: [2.728, -11.665, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, -0.613, 0.790]
+- Rotation: in RPY (radian) [0.000, 0.000, -1.320]
+- Rotation: in RPY (degree) [0.000, 0.000, -75.618]
+- Matrix:
+  0.248  0.969  0.000  2.728
+ -0.969  0.248 -0.000 -11.665
+ -0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+
+--------------------------------------------
+
+Pasillo 3, carretilla:
+
+bran@bran:~$ ros2 run tf2_ros tf2_echo map base_footprint
+[INFO] [1784551547.709205835] [tf2_echo]: Waiting for transform map ->  base_footprint: Invalid frame ID "map" passed to canTransform argument target_frame - frame does not exist
+[INFO] [1784551549.692905969] [tf2_echo]: Waiting for transform map ->  base_footprint: Invalid frame ID "map" passed to canTransform argument target_frame - frame does not exist
+[INFO] [1784551550.692920042] [tf2_echo]: Waiting for transform map ->  base_footprint: Invalid frame ID "map" passed to canTransform argument target_frame - frame does not exist
+At time 1271.100000000
+- Translation: [-3.225, -20.157, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.441, 0.897]
+- Rotation: in RPY (radian) [0.000, -0.000, 0.914]
+- Rotation: in RPY (degree) [0.000, -0.000, 52.347]
+- Matrix:
+  0.611 -0.792  0.000 -3.225
+  0.792  0.611  0.000 -20.157
+  0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+
+  
+--------------------------------------------
+  
+  Esquina Derecha Pasillo 5:
+ 
+bran@bran:~$ ros2 run tf2_ros tf2_echo map base_footprint
+[INFO] [1784551684.335509352] [tf2_echo]: Waiting for transform map ->  base_footprint: Invalid frame ID "map" passed to canTransform argument target_frame - frame does not exist
+At time 1405.660000000
+- Translation: [-11.322, -20.789, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, -0.839, 0.545]
+- Rotation: in RPY (radian) [0.000, 0.000, -1.990]
+- Rotation: in RPY (degree) [0.000, 0.000, -114.004]
+- Matrix:
+ -0.407  0.914  0.000 -11.322
+ -0.914 -0.407 -0.000 -20.789
+ -0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+
+
+
+--------------------------------------------
+  
+Pasillo 5, armario central:
+
+bran@bran:~$ ros2 run tf2_ros tf2_echo map base_footprint
+[INFO] [1784563963.825565610] [tf2_echo]: Waiting for transform map ->  base_footprint: Invalid frame ID "map" passed to canTransform argument target_frame - frame does not exist
+At time 13665.520000000
+- Translation: [-11.985, -9.304, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, 0.896, -0.444]
+- Rotation: in RPY (radian) [0.000, -0.000, -2.223]
+- Rotation: in RPY (degree) [0.000, -0.000, -127.342]
+- Matrix:
+ -0.607  0.795  0.000 -11.985
+ -0.795 -0.607  0.000 -9.304
+  0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+
+
+--------------------------------------------
+
+Pasillo 4, viga cercana al centro del mapa:
+bran@bran:~$ ros2 run tf2_ros tf2_echo map base_footprint
+[INFO] [1784564076.648039779] [tf2_echo]: Waiting for transform map ->  base_footprint: Invalid frame ID "map" passed to canTransform argument target_frame - frame does not exist
+[INFO] [1784564078.632926748] [tf2_echo]: Waiting for transform map ->  base_footprint: Invalid frame ID "map" passed to canTransform argument target_frame - frame does not exist
+At time 13779.280000000
+- Translation: [-7.534, -2.010, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, -0.698, 0.716]
+- Rotation: in RPY (radian) [0.000, 0.000, -1.545]
+- Rotation: in RPY (degree) [0.000, 0.000, -88.520]
+- Matrix:
+  0.026  1.000  0.000 -7.534
+ -1.000  0.026 -0.000 -2.010
+ -0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+
+
+--------------------------------------------
+
+Estanterias centrales derechas, viga superior
+
+bran@bran:~$ ros2 run tf2_ros tf2_echo map base_footprint
+[INFO] [1784564262.382711190] [tf2_echo]: Waiting for transform map ->  base_footprint: Invalid frame ID "map" passed to canTransform argument target_frame - frame does not exist
+[INFO] [1784564264.365377793] [tf2_echo]: Waiting for transform map ->  base_footprint: Invalid frame ID "map" passed to canTransform argument target_frame - frame does not exist
+At time 13964.980000000
+- Translation: [-8.600, 2.261, 0.000]
+- Rotation: in Quaternion (xyzw) [0.000, 0.000, -0.450, 0.893]
+- Rotation: in RPY (radian) [0.000, 0.000, -0.934]
+- Rotation: in RPY (degree) [0.000, 0.000, -53.495]
+- Matrix:
+  0.595  0.804  0.000 -8.600
+ -0.804  0.595 -0.000  2.261
+ -0.000  0.000  1.000  0.000
+  0.000  0.000  0.000  1.000
+
