@@ -25,6 +25,19 @@ sudo apt install -y ros-jazzy-turtlebot3 ros-jazzy-turtlebot3-msgs ros-jazzy-tur
 echo "export TURTLEBOT3_MODEL=waffle" >> ~/.bashrc
 source ~/.bashrc
 
+## Dependencias de navegación por waypoints y captura de imágenes
+
+Necesarias para los scripts de ruta predefinida y misión de inspección
+(`scripts/ruta_waypoints.py` y `scripts/ruta_waypoints_foto.py`):
+
+```
+sudo apt install -y ros-jazzy-nav2-simple-commander ros-jazzy-cv-bridge python3-opencv
+```
+
+- `nav2-simple-commander`: API Python de alto nivel sobre las acciones de Nav2.
+- `cv-bridge`: conversión entre mensajes ROS `sensor_msgs/Image` y matrices OpenCV.
+- `python3-opencv`: OpenCV (escritura de imágenes y procesado de visión).
+
 ## Uso
 ### Lanzar simulación base para pruebas con TurtleBot3
 ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
@@ -182,3 +195,52 @@ el procedimiento estándar**: el cierre normal sigue siendo Ctrl+C en orden
 inverso al lanzamiento (teleop → RViz/Nav2 → SLAM → Gazebo), esperando el
 prompt en cada paso. Usar el script solo cuando queden procesos zombi
 (síntoma típico: dos publishers en `ros2 topic info /clock --verbose`). 
+
+
+## Ruta predefinida (waypoints) y misión de inspección
+
+Con la simulación y Nav2 lanzados (ver sección anterior) y el arranque
+verificado ("Managed nodes are active" en ambos lifecycle managers), la ruta
+del caso de uso se ejecuta con uno de estos dos scripts:
+
+**Ruta simple** (recorre los waypoints sin paradas):
+
+```
+python3 scripts/ruta_waypoints.py
+```
+
+**Misión de inspección** (en cada waypoint: parada de 7 s y captura de una
+foto de la cámara):
+
+```
+python3 scripts/ruta_waypoints_foto.py
+```
+
+Ambos esperan automáticamente a que Nav2 esté activo, por lo que pueden
+lanzarse inmediatamente después del launch. La ruta consta de 8 waypoints
+con nombre descriptivo más un noveno de retorno a la base (0, 0), formando
+un lazo cerrado: al terminar, el robot queda en su estado inicial y la
+misión puede relanzarse sin recolocar nada.
+
+Salida esperada: el log del script anuncia cada waypoint al alcanzarlo
+(`-> Waypoint N/9: <nombre>`), y al finalizar imprime el resultado y la
+duración total de la misión. Si un waypoint no puede alcanzarse, se
+registra el error y la misión continúa con el siguiente.
+
+Las fotos se guardan en `~/TFG/fotos_waypoints/` con el formato
+`wpNN_<nombre>_<fecha>_<hora>.png`. Este directorio contiene datos
+generados y está excluido del repositorio (`.gitignore`).
+
+La pausa de 7 s por waypoint simula el tiempo de inspección del punto de
+interés y garantiza que la captura se realiza con el robot completamente
+detenido. Las fotos son la entrada del análisis de visión artificial
+(detección de obstáculos, Fase 4).
+
+**Configuración de encuadre**: en el script, el flag
+`ORIENTAR_HACIA_SIGUIENTE` controla la orientación en cada waypoint. Con
+`False` (valor en uso), el robot adopta la orientación capturada
+manualmente en cada punto — el yaw del waypoint define el encuadre de la
+foto. Con `True`, se reorienta automáticamente hacia el waypoint
+siguiente (navegación más fluida, sin control del encuadre). Para
+modificar la ruta basta editar la lista `WAYPOINTS` del script; las poses
+se capturan con `ros2 run tf2_ros tf2_echo map base_footprint`.
