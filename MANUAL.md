@@ -41,8 +41,7 @@ sustituirlo por el TurtleBot3 Waffle. El mundo está en `worlds/warehouse_turtle
 launch file que lo arranca y spawnea el robot, en `launch/warehouse_tb3.launch.py`.
 
 ```
-export TURTLEBOT3_MODEL=waffle
-ros2 launch ~/TFG/launch/warehouse_tb3.launch.py
+ros2 launch launch/warehouse_tb3.launch.py
 ```
 
 **Nota**: en el primer arranque con conexión a internet, Gazebo descarga
@@ -108,7 +107,7 @@ caen a desconocido, nunca a libre, para no crear zonas transitables falsas.
 ```
 python3 scripts/limpiar_mapas.py maps/mapa_tfg_semi_3.pgm maps/mapa_tfg_semi_3_limpio.pgm
 ```
-
+ 
 El `.yaml` del mapa limpio es una copia del original apuntando al nuevo `.pgm`.
 **El mapa validado para navegación es `maps/mapa_tfg_semi_3_limpio`.**
 
