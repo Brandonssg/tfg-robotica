@@ -1,0 +1,64 @@
+# =============================================================================
+# escenarios/escenario_B.yaml
+# Segunda iteración de la misión: mismos puntos físicos, distinto estado.
+# pose: [x, y, z, roll, pitch, yaw] en metros y radianes (marco world)
+#
+# Diferencias respecto a escenario_A:
+#  - wp01: boyas ROJAS -> VERDES (envío listo)
+#  - wp02: se retira toolbox1 y extintor1 (queda solo toolbox2 -> "falta material")
+#  - wp03: sin cambios (mesitas de referencia se mantienen)
+#  - wp04: sin cambios (cordón de 4 conos se mantiene)
+#  - wp05: se retira el sustituto de cono negro (punto ya revisado -> sin aviso)
+#  - wp06: se retiran ambos rescue_randy (sin personal presente)
+#  - wp07: evento aparte, ver eventos/barrera_wp07.yaml
+#  - wp08: se retiran ambos toolbox y el extintor (estantería vacía)
+# =============================================================================
+
+# --- wp01: cajas_para_entrega — boya verde (envío listo) ---
+wp01_boya1:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/mb_marker_buoy_green/4/model.sdf"
+  pose: [12.666, -4.625, 0.555, 0.0, 0.0, 0.0]
+
+wp01_boya2:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/mb_marker_buoy_green/4/model.sdf"
+  pose: [12.65, -1.941, 0.555, 0.0, 0.0, 0.0]
+
+# --- wp02: pasillo_1_carritos — solo queda toolbox2 (falta material) ---
+wp02_toolbox2:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/toolbox/2/model.sdf"
+  pose: [14.56, -15.803, 0.897, 0.0, 0.0, 1.56]
+
+# --- wp03: caja_grande_pasillo_2 — sin cambios respecto a A ---
+wp03_bedsidetable1:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable/2/model.sdf"
+  pose: [2.053, -20.091, 0.0, 0.0, 0.0, 0.0]
+
+wp03_bedsidetable2:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable/2/model.sdf"
+  pose: [1.55, -19.302, 0.0, 0.0, 0.0, 0.0]
+
+# --- wp04: pasillo_3_carretilla — sin cambios respecto a A ---
+wp04_cono1:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/model.sdf"
+  pose: [-1.318, -9.658, 0.0, 0.0, 0.0, 0.0]
+
+wp04_cono2:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/model.sdf"
+  pose: [-1.436, -13.103, 0.0, 0.0, 0.0, 0.0]
+
+wp04_cono3:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/model.sdf"
+  pose: [-1.238, -16.755, 0.0, 0.0, 0.0, 0.0]
+
+wp04_cono4:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/model.sdf"
+  pose: [-1.237, -19.514, 0.0, 0.0, 0.0, 0.0]
+
+# --- wp05: esquina_pasillo_5 — sin señal (punto ya revisado) ---
+# (sin entrada: sustituto de cono negro retirado)
+
+# --- wp06: armario_central — sin personal ---
+# (sin entrada: ambos rescue_randy retirados)
+
+# --- wp08: estanterias_centrales — vacía ---
+# (sin entrada: ambos toolbox y el extintor retirados)
