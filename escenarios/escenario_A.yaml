@@ -1,0 +1,94 @@
+# =============================================================================
+# escenarios/escenario_A.yaml
+# Estado inicial de señales mutables para la misión de inspección.
+# pose: [x, y, z, roll, pitch, yaw] en metros y radianes (marco world)
+#
+# La barrera amarilla (drc_practice_organge_jersey_barrier*) NO está aquí:
+# es un EVENTO runtime de wp07, no estado inicial del escenario.
+# Ver eventos/barrera_wp07.yaml
+#
+# FireExtinguisher_1 (pose suelta en 21.11, 10.45, sobrante) eliminado.
+# =============================================================================
+
+# --- wp01: cajas_para_entrega — boya roja/verde por color-hue ---
+# Escenario A: ambas en rojo (envío en preparación)
+wp01_boya1:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/mb_marker_buoy_red/5/model.sdf"
+  pose: [12.666, -4.625, 0.555, 0.0, 0.0, 0.0]
+
+wp01_boya2:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/mb_marker_buoy_red/5/model.sdf"
+  pose: [12.65, -1.941, 0.555, 0.0, 0.0, 0.0]
+
+# --- wp02: pasillo_1_carritos — toolbox+extintor sobre carrito ---
+wp02_toolbox1:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/toolbox/2/model.sdf"
+  pose: [14.521, -14.867, 0.901, 0.0, 0.0, 1.56]
+
+wp02_toolbox2:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/toolbox/2/model.sdf"
+  pose: [14.56, -15.803, 0.897, 0.0, 0.0, 1.56]
+
+wp02_extintor1:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/fireextinguisher/3/model.sdf"
+  pose: [14.69, -15.255, 0.0, 0.0, 0.0, -2.805]
+
+# --- wp03: caja_grande_pasillo_2 — comparación con imagen de referencia ---
+# Las mesitas son el fondo/estado normal contra el que se compara la foto;
+# la detección marca aviso si aparece algo que no debería estar (obstrucción
+# no prevista) respecto a esta referencia.
+wp03_bedsidetable1:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable/2/model.sdf"
+  pose: [2.053, -20.091, 0.0, 0.0, 0.0, 0.0]
+
+wp03_bedsidetable2:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/bedsidetable/2/model.sdf"
+  pose: [1.55, -19.302, 0.0, 0.0, 0.0, 0.0]
+
+# --- wp04: pasillo_3_carretilla — cono naranja de obra por forma/contorno ---
+# Cordón de zona de precaución: las 4 unidades pertenecen a este waypoint.
+wp04_cono1:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/model.sdf"
+  pose: [-1.318, -9.658, 0.0, 0.0, 0.0, 0.0]
+
+wp04_cono2:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/model.sdf"
+  pose: [-1.436, -13.103, 0.0, 0.0, 0.0, 0.0]
+
+wp04_cono3:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/model.sdf"
+  pose: [-1.238, -16.755, 0.0, 0.0, 0.0, 0.0]
+
+wp04_cono4:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/model.sdf"
+  pose: [-1.237, -19.514, 0.0, 0.0, 0.0, 0.0]
+
+# --- wp05: esquina_pasillo_5 — "cono negro" por color-canal V ---
+# Sustituto de asset confirmado: no existe cono negro en la librería Fuel;
+# se usa esta boya negra como estímulo equivalente para el detector value/negro.
+wp05_conoNegro_sustituto:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/mb_marker_buoy_black/7/model.sdf"
+  pose: [-14.387, -24.215, 0.555, 0.0, 0.0, 0.0]
+
+# --- wp06: armario_central — rescue_randy con chaleco amarillo (2 operarios) ---
+# Poses reposicionadas por el usuario para asegurar que ambos entren en la foto.
+wp06_randy1:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/rescue randy sitting/8/model.sdf"
+  pose: [-14.371, -14.272, 0.0, 0.0, 0.0, 1.5]
+
+wp06_randy2:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/rescue randy sitting/8/model.sdf"
+  pose: [-14.298, -11.584, 0.0, 0.0, 0.0, 1.5]
+
+# --- wp08: estanterias_centrales — toolbox/extintor ---
+wp08_toolbox1:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/toolbox/2/model.sdf"
+  pose: [-3.907, 0.01, 0.0, 0.0, 0.0, 0.0]
+
+wp08_toolbox2:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/toolbox/2/model.sdf"
+  pose: [-6.645, 0.067, 0.0, 0.0, 0.0, 0.0]
+
+wp08_extintor1:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/fireextinguisher/3/model.sdf"
+  pose: [-7.769, -0.11, 0.0, 0.0, 0.0, -0.145]

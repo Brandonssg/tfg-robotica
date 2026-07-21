@@ -1,0 +1,17 @@
+# =============================================================================
+# eventos/barrera_wp07.yaml
+# Evento runtime — NO es estado inicial de escenario.
+# Se inyecta a mitad de misión (spawn con gz service create) para disparar
+# el detector de obstáculo dinámico y la replanificación de Nav2 en wp07.
+# pose: [x, y, z, roll, pitch, yaw]
+#
+# Ambas instancias participan en la demo (confirmado).
+# =============================================================================
+
+wp07_barrera1:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/drc practice: orange jersey barrier/3/model.sdf"
+  pose: [-7.995, -6.102, 0.0, 0.0, 0.0, 0.0]
+
+wp07_barrera2:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/drc practice: orange jersey barrier/3/model.sdf"
+  pose: [-8.071, -12.574, 0.0, 0.0, 0.0, 0.0]
