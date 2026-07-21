@@ -34,6 +34,8 @@ from nav2_simple_commander.robot_navigator import BasicNavigator, TaskResult
 
 ORIENTAR_HACIA_SIGUIENTE = False               # Flag para reorientar el robot hacia el siguiente waypoint.
 PAUSA_SEG = 7.0                               # Parada total en cada waypoint (s).
+INTENTOS_POR_WAYPOINT = 2                     # Reintentos ante fallo transitorio del BT
+                                              # (p. ej. timeout de acuse del planner bajo carga).
 TOPIC_CAMARA = "/camera/image_raw"            # Camara del Waffle (via bridge de Gazebo).
 DIR_FOTOS = os.path.expanduser("~/TFG/fotos_waypoints")  # Carpeta de salida.
 
@@ -46,7 +48,7 @@ WAYPOINTS = [
     ("Esquina Derecha Pasillo 5",        -11.322, -20.789, -0.839, 0.545),
     ("Pasillo 5 - armario central",      -11.985,  -9.304,  0.896, -0.444),
     ("Pasillo 4 - viga centro mapa",      -7.534,  -2.010, -0.698, 0.716),
-    ("Estanterias centrales dcha - viga", -8.600,   2.261, -0.450, 0.893),
+    ("Estanterias centrales dcha - viga", -8.500,   2.261, -0.450, 0.893),
     ("Vuelta a base (spawn)",              0.000,   0.000,  0.000, 1.000),
 ]
 
@@ -131,17 +133,36 @@ def main() -> None:
 
     for i, pose in enumerate(ruta):
         nombre = WAYPOINTS[i][0]
-        navigator.get_logger().info(f"-> Navegando a {i + 1}/{len(ruta)}: {nombre}")
-        navigator.goToPose(pose)              # Un goal individual: el script recupera
-                                              # el control al completarse.
-        while not navigator.isTaskComplete():
-            pass                              # (aqui podria leerse feedback.distance_remaining)
+        alcanzado = False
 
-        resultado = navigator.getResult()
-        if resultado != TaskResult.SUCCEEDED:
-            # Si un waypoint falla, se registra y se continua con el siguiente:
-            # criterio de mision robusta (un fallo puntual no aborta la patrulla).
-            navigator.get_logger().error(f"No se alcanzo '{nombre}' ({resultado}). "
+        # Reintento por waypoint: un fallo del BT puede ser transitorio (timeout
+        # de acuse del action server bajo carga de CPU) con el robot ya en el
+        # objetivo o muy cerca. El segundo intento suele triunfar de inmediato.
+        for intento in range(1, INTENTOS_POR_WAYPOINT + 1):
+            sufijo = "" if intento == 1 else f" (reintento {intento - 1})"
+            navigator.get_logger().info(
+                f"-> Navegando a {i + 1}/{len(ruta)}: {nombre}{sufijo}")
+            # Refrescar el timestamp: la pose se creo al inicio de la mision y
+            # su stamp queda obsoleto para goals lanzados minutos despues.
+            pose.header.stamp = navigator.get_clock().now().to_msg()
+            navigator.goToPose(pose)          # Un goal individual: el script recupera
+                                              # el control al completarse.
+            while not navigator.isTaskComplete():
+                pass                          # (aqui podria leerse feedback.distance_remaining)
+
+            resultado = navigator.getResult()
+            if resultado == TaskResult.SUCCEEDED:
+                alcanzado = True
+                break
+            navigator.get_logger().warn(
+                f"Fallo el intento {intento}/{INTENTOS_POR_WAYPOINT} hacia "
+                f"'{nombre}' ({resultado}).")
+
+        if not alcanzado:
+            # Si un waypoint falla tras agotar los reintentos, se registra y se
+            # continua con el siguiente: criterio de mision robusta (un fallo
+            # puntual no aborta la patrulla).
+            navigator.get_logger().error(f"No se alcanzo '{nombre}'. "
                                          "Se continua con el siguiente waypoint.")
             continue
 
@@ -156,7 +177,10 @@ def main() -> None:
     navigator.get_logger().info(f"Mision completada en {duracion:.1f} s "
                                 f"({duracion / 60:.1f} min).")
 
-    navigator.lifecycleShutdown()
+    # NO llamar a navigator.lifecycleShutdown(): apagaria todos los nodos de
+    # Nav2 (AMCL incluido) e impediria relanzar misiones sin reiniciar el
+    # stack. El flujo A->B->C exige que Nav2 sobreviva al script: solo se
+    # cierra el contexto ROS de ESTE proceso.
     rclpy.shutdown()
 
 

@@ -4,6 +4,7 @@
 - Ubuntu 24.04 LTS
 
 ## Instalación de ROS2 Jazzy
+```bash
 sudo apt update && sudo apt install -y curl gnupg lsb-release
 sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
@@ -11,26 +12,33 @@ sudo apt update
 sudo apt install -y ros-jazzy-desktop
 echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
 source ~/.bashrc
+```
 
 ## Instalación de Gazebo Harmonic
+```bash
 sudo apt install -y ros-jazzy-ros-gz
+```
 
 ## Herramientas de desarrollo
+```bash
 sudo apt install -y python3-colcon-common-extensions python3-rosdep git
 sudo rosdep init
 rosdep update
+```
 
 ## Instalación de TurtleBot3
+```bash
 sudo apt install -y ros-jazzy-turtlebot3 ros-jazzy-turtlebot3-msgs ros-jazzy-turtlebot3-simulations
 echo "export TURTLEBOT3_MODEL=waffle" >> ~/.bashrc
 source ~/.bashrc
+```
 
 ## Dependencias de navegación por waypoints y captura de imágenes
 
 Necesarias para los scripts de ruta predefinida y misión de inspección
 (`scripts/ruta_waypoints.py` y `scripts/ruta_waypoints_foto.py`):
 
-```
+```bash
 sudo apt install -y ros-jazzy-nav2-simple-commander ros-jazzy-cv-bridge python3-opencv
 ```
 
@@ -40,10 +48,14 @@ sudo apt install -y ros-jazzy-nav2-simple-commander ros-jazzy-cv-bridge python3-
 
 ## Uso
 ### Lanzar simulación base para pruebas con TurtleBot3
+```bash
 ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+```
 
 ### Control manual por teclado (terminal aparte)
+```bash
 ros2 run turtlebot3_teleop teleop_keyboard
+```
 
 
 ## Entorno final: almacén (warehouse)
@@ -53,7 +65,7 @@ Como entorno a usar para este proyecto y más avanzado al `turtlebot3_world` de 
 sustituirlo por el TurtleBot3 Waffle. El mundo está en `worlds/warehouse_turtlebot3.sdf` y el
 launch file que lo arranca y spawnea el robot, en `launch/warehouse_tb3.launch.py`.
 
-```
+```bash
 ros2 launch launch/warehouse_tb3.launch.py
 ```
 
@@ -72,7 +84,7 @@ bridge (`/odom`, `/scan`, `/imu`, `/tf`, `/camera/camera_info`, `/cmd_vel`).
 
 Con la simulación base lanzada (`warehouse_tb3.launch.py`), en otra terminal:
 
-```
+```bash
 ros2 launch slam_toolbox online_async_launch.py \
   use_sim_time:=true \
   slam_params_file:=$HOME/TFG/config/slam_params_warehouse.yaml
@@ -99,7 +111,7 @@ En caso de no conseguir un mapeado correcto puedes probar con los siguientes cam
 Mueve el robot con teleop para cubrir todo el mapa, a velocidad moderada y
 evitando giros bruscos sobre sí mismo. Cuando esté completo, guárdalo:
 
-```
+```bash
 ros2 run nav2_map_server map_saver_cli -f ~/TFG/maps/mapa_tfg_semi_3
 ```
 
@@ -117,7 +129,7 @@ reasigna a los tres valores trinarios que espera Nav2 (0 ocupado, 205
 desconocido, 254 libre), con criterio conservador: los valores intermedios
 caen a desconocido, nunca a libre, para no crear zonas transitables falsas.
 
-```
+```bash
 python3 scripts/limpiar_mapas.py maps/mapa_tfg_semi_3.pgm maps/mapa_tfg_semi_3_limpio.pgm
 ```
  
@@ -130,7 +142,7 @@ El `.yaml` del mapa limpio es una copia del original apuntando al nuevo `.pgm`.
 Con la simulación base lanzada (`warehouse_tb3.launch.py`) y ya cargada del
 todo (el almacén renderizado y el robot respondiendo), en otra terminal:
 
-```
+```bash
 ros2 launch turtlebot3_navigation2 navigation2.launch.py \
   use_sim_time:=true \
   map:=$HOME/TFG/maps/mapa_tfg_semi_3_limpio.yaml \
@@ -168,9 +180,9 @@ costmap local.
 Si la pila quedó en `inactive` (goals rechazados), se puede reintentar la
 secuencia de activación sin cerrar nada:
 
-```
+```bash
 ros2 service call /lifecycle_manager_navigation/manage_nodes \
-  nav2_msgs/srv/ManageLifecycleNodes "{command: 0}"
+nav2_msgs/srv/ManageLifecycleNodes "{command: 0}"
 ```
 
 Comprobar el estado de un nodo concreto: `ros2 lifecycle get /bt_navigator`
@@ -205,14 +217,14 @@ del caso de uso se ejecuta con uno de estos dos scripts:
 
 **Ruta simple** (recorre los waypoints sin paradas):
 
-```
+```bash
 python3 scripts/ruta_waypoints.py
 ```
 
 **Misión de inspección** (en cada waypoint: parada de 7 s y captura de una
 foto de la cámara):
 
-```
+```bash
 python3 scripts/ruta_waypoints_foto.py
 ```
 
@@ -304,7 +316,7 @@ existen para evitar justamente eso.
    La clave (`wp08_toolbox1`) es el nombre de instancia que se usará al
    spawnear y eliminar el elemento; no tiene por qué coincidir con el
    `<name>` autogenerado por Gazebo.
-   
+
    Recomiendo el uso de IA para agilizar este último paso.
 
 Ver `worlds/world_escenario2.sdf` para una plantilla en blanco con esta
@@ -352,7 +364,7 @@ mal la ruta.
 
 | Escenario | Descripción |
 |---|---|
-| `escenario_A.yaml` | Estado base: todos los puntos con señal presente (boyas rojas en wp01). |
+| `escenario_A.yaml` | Estado completo: todos los puntos con señal presente (boyas rojas en wp01). |
 | `escenario_B.yaml` | Degradación parcial: boyas verdes en wp01; wp02, wp05, wp06 y wp08 vaciados parcial o totalmente; wp03/wp04 sin cambios. |
 | `escenario_C.yaml` | Degradación en wp02/wp03/wp04; recuperación de wp05/wp06/wp08 al estado de A; wp01 se mantiene en verde. |
 
@@ -361,13 +373,122 @@ presente/ausente sin repetir la misma combinación completa — pensado
 como evidencia en la defensa de que la detección responde al estado real
 de la escena y no a un resultado memorizado.
 
-### 5. Pendiente (TODO)
 
-- **`scripts/cargar_escenario.py`**: script que debe hacer *diff* entre
-  el escenario actualmente cargado y el nuevo YAML — crear lo que
-  aparece, **eliminar lo que ya no está** — no solo iterar y crear el
-  YAML nuevo, o quedarán elementos "fantasma" de escenarios anteriores.
-- **`eventos/barrera_wp07.yaml`**: guion final de disparo. Confirmado que
-  ambas instancias de barrera forman una única zona cortada (un solo
-  evento), pendiente decidir si se spawnean simultáneamente o con
+### 5. Carga automatizada de escenarios: `scripts/cargar_escenario.py`
+
+Automatiza las llamadas a los servicios de la sección 3: lee un YAML de
+escenario y crea/elimina en bloque todos sus elementos sobre el mundo ya
+en marcha, sin reiniciar la simulación ni perder la localización del
+robot (Gazebo, Nav2 y AMCL siguen corriendo durante el cambio).
+
+**Uso:**
+
+```bash
+# Con Gazebo, Nav2 y AMCL activos, y SIEMPRE ANTES de lanzar la ruta:
+python3 scripts/cargar_escenario.py escenarios/escenario_A.yaml
+
+# Ver qué haría sin tocar nada (recomendado antes de cada carga real):
+python3 scripts/cargar_escenario.py escenarios/escenario_B.yaml --dry-run
+```
+
+**Orden dentro del flujo de misión:** el escenario debe cargarse *antes*
+de ejecutar `ruta_waypoints_foto.py`. Si la ruta arranca primero, el
+robot puede fotografiar waypoints aún vacíos y el resultado de la
+inspección queda corrompido sin error visible. La secuencia completa de
+una iteración es:
+
+```bash
+python3 scripts/cargar_escenario.py escenarios/escenario_A.yaml
+python3 scripts/ruta_waypoints_foto.py
+# ...misión completa... y para la siguiente iteración, sin reiniciar nada:
+python3 scripts/cargar_escenario.py escenarios/escenario_B.yaml
+python3 scripts/ruta_waypoints_foto.py
+```
+
+**Estrategia: diff contra el escenario anterior.** El script no se
+limita a crear todo lo que aparece en el YAML nuevo; compara con el
+escenario cargado previamente y:
+
+| Situación de la clave | Acción |
+|---|---|
+| Solo en el escenario anterior | Eliminar (`remove`) |
+| Solo en el escenario nuevo | Crear (`create`) |
+| En ambos, mismo modelo y pose | No se toca |
+| En ambos, modelo o pose distintos | Eliminar + crear |
+
+El porqué: sin diff, al pasar de A a B quedarían elementos "fantasma"
+del escenario anterior superpuestos con los del nuevo (p. ej. boyas
+rojas y verdes a la vez en wp01). El orden de operaciones es primero
+todas las eliminaciones y luego las creaciones, para que una clave
+reutilizada con otro modelo (como `wp01_boya1` en A→B) no colisione
+consigo misma.
+
+**Estado persistido y verificación read-back.** El último escenario
+cargado con éxito se guarda en `escenarios/.estado_actual.yaml`. Este
+fichero es solo una caché, **no** la fuente de verdad: en cada ejecución
+el script verifica sus entradas contra la realidad con `gz model --list`
+y descarta las que ya no existen en el mundo (caso típico: se reinició
+la simulación y el mundo arrancó vacío, pero el fichero de estado
+sobrevivió). Esas entradas "huérfanas" se notifican con el aviso
+`¿simulacion reiniciada?` y se recrean automáticamente, por lo que **no
+hace falta borrar `.estado_actual.yaml` a mano tras reiniciar Gazebo**.
+
+`.estado_actual.yaml` es estado de ejecución, no dato del proyecto:
+está excluido del repositorio vía `.gitignore`.
+
+**Detalles de implementación relevantes:**
+
+- Las poses de los YAML usan roll/pitch/yaw (lo que Gazebo exporta al
+  guardar la plantilla, ver sección 2), pero el servicio
+  `gz.msgs.EntityFactory` exige cuaternión: el script hace la
+  conversión internamente, por lo que las orientaciones con yaw ≠ 0
+  (p. ej. los toolbox de wp02) se spawnean correctamente. Los comandos
+  manuales de la sección 3 omiten la orientación y solo son válidos
+  para elementos con yaw = 0.
+- Timeout de servicio: 2000 ms por llamada (holgado para encadenar las
+  ~17 operaciones de un escenario completo).
+- Si alguna operación falla, el estado guardado **no** se actualiza,
+  para no quedar desincronizado con lo que realmente hay en Gazebo;
+  basta corregir el problema y relanzar el script (el diff recalculará
+  solo lo pendiente).
+- Requiere `pyyaml` (`pip install pyyaml --break-system-packages`).
+
+> **Nota:** la barrera de wp07 (`eventos/barrera_wp07.yaml`) queda fuera
+> de este mecanismo deliberadamente: es un evento runtime que se inyecta
+> a mitad de misión, no estado inicial de escenario (ver sección 1).
+
+
+### Validación: persistencia de Nav2 entre misiones consecutivas
+
+Ejecución de tres misiones consecutivas (`escenario` sin cargar, ruta base)
+sin tocar Gazebo ni Nav2 entre medias, tras retirar `lifecycleShutdown()`
+y ajustar `default_server_timeout` (ver más arriba):
+
+| Ejecución | Duración | Waypoints fallidos | Espera de arranque de Nav2 |
+|---|---|---|---|
+| 1 | 550.8 s (9.2 min) | 0 | Inmediata |
+| 2 | 570.0 s (9.5 min) | 0 | Inmediata |
+| 3 | 553.8 s (9.2 min) | 0 | ~5 s (descubrimiento de servicios, no reinicio) |
+
+**Detalles de ejecución**
+- Para la ejecución 1 se ha cargado el escenario A. 
+- Para la ejecución 2 se ha cargado el escenario B.
+- Para la ejecución 3 se ha cargado el escenario C.  
+
+**Confirmado:** Nav2 sobrevive a las tres misiones sin intervención manual
+— ya no aparece el bloqueo `amcl/get_state service not available,
+waiting...` prolongado que obligaba a reiniciar Nav2 entre iteraciones.
+Tampoco se ha repetido el fallo de `compute_path_to_pose` (timeout de
+acuse del planner bajo carga) visto en pruebas anteriores.
+
+**Línea base de referencia** (sin escenario cargado, sin obstáculos):
+9 waypoints completados, duración típica **550-570 s (~9.2-9.5 min)**.
+Cifra de comparación para las misiones con escenario + obstáculos
+dinámicos de la Fase 4.
+
+### 6. Pendiente (TODO)
+
+- **`eventos/barrera_wp07.yaml`**: guion final de disparo. Confirmado
+  que ambas instancias de barrera forman una única zona cortada (un
+  solo evento), pendiente decidir si se spawnean simultáneamente o con
   desfase temporal dentro del script de evento.
