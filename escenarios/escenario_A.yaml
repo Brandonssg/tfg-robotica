@@ -6,8 +6,7 @@
 # La barrera amarilla (drc_practice_organge_jersey_barrier*) NO está aquí:
 # es un EVENTO runtime de wp07, no estado inicial del escenario.
 # Ver eventos/barrera_wp07.yaml
-#
-# FireExtinguisher_1 (pose suelta en 21.11, 10.45, sobrante) eliminado.
+
 # =============================================================================
 
 # --- wp01: cajas_para_entrega — boya roja/verde por color-hue ---

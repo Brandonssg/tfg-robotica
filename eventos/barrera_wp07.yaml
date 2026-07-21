@@ -5,7 +5,9 @@
 # el detector de obstáculo dinámico y la replanificación de Nav2 en wp07.
 # pose: [x, y, z, roll, pitch, yaw]
 #
-# Ambas instancias participan en la demo (confirmado).
+# Ambas instancias forman UN ÚNICO evento (una sola zona cortada de dos
+# tramos), no dos disparos independientes de replanificación. Se spawnean
+# juntas en la misma llamada del script de evento.
 # =============================================================================
 
 wp07_barrera1:
