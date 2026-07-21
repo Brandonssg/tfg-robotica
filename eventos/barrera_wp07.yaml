@@ -12,8 +12,8 @@
 
 wp07_barrera1:
   modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/drc practice: orange jersey barrier/3/model.sdf"
-  pose: [-7.995, -6.102, 0.0, 0.0, 0.0, 0.0]
+  pose: [-7.8873, -6.11, 0.0, 0.0, 0.0, 1.5]
 
 wp07_barrera2:
   modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/drc practice: orange jersey barrier/3/model.sdf"
-  pose: [-8.071, -12.574, 0.0, 0.0, 0.0, 0.0]
+  pose: [-7.7932, -20.912, 0.0, 0.0, 0.0, 1.5]
