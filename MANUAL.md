@@ -244,3 +244,130 @@ foto. Con `True`, se reorienta automáticamente hacia el waypoint
 siguiente (navegación más fluida, sin control del encuadre). Para
 modificar la ruta basta editar la lista `WAYPOINTS` del script; las poses
 se capturan con `ros2 run tf2_ros tf2_echo map base_footprint`.
+
+## Escenarios de inspección: creación, carga y eventos dinámicos
+
+Esta sección documenta el flujo para crear y reproducir escenarios de
+inspección (Fase 4), y el mecanismo de inyección de eventos dinámicos
+usado para la demo de replanificación de Nav2.
+
+### 1. Concepto: mundo base, escenario y evento
+
+- **Mundo base** (`worlds/warehouse_expand.sdf`): el almacén y todo el
+  mobiliario/soporte *permanente*. Se mapea una única vez con SLAM Toolbox
+  y da lugar al mapa de navegación (`maps/mapa_inspeccion_limpio`).
+- **Escenario** (`escenarios/escenario_*.yaml`): el estado inicial de las
+  señales *mutables* de cada punto de inspección (conos, toolboxes,
+  personal, etc.). No forma parte del mundo base ni del mapa: se
+  inyecta en tiempo de ejecución sobre el mundo ya cargado.
+- **Evento** (`eventos/*.yaml`): una inyección que ocurre *a mitad de
+  misión*, no al inicio. Es el mecanismo usado para el obstáculo dinámico
+  que dispara la replanificación de Nav2.
+
+La separación escenario/evento no es solo organizativa: si un elemento de
+inspección se tratara como si fuera un obstáculo inesperado, el detector
+de obstáculo dinámico (que compara el escaneo LiDAR contra el mapa)
+generaría falsos positivos en cada punto de inspección. Los escenarios
+existen para evitar justamente eso.
+
+### 2. Cómo generar un nuevo escenario desde Gazebo
+
+1. Lanza el mundo base y coloca los elementos deseados con
+   `Resource Spawner → Fuel Resources` (busca el modelo por nombre, en  
+   https://app.gazebosim.org/OpenRobotics encontrarás algunos ejemplos),
+   ajustando su posición y orientación con el editor de transformar.
+2. Guarda el mundo con los elementos colocados como una **plantilla
+   separada** (`File → Save World As` → `worlds/world_escenario2.sdf`).
+   No sobrescribas nunca `warehouse_expand.sdf`: la plantilla es
+   desechable, el mundo base no.
+3. Abre la plantilla guardada y localiza cada elemento añadido buscando
+   `<include>` (los del mundo original ya estaban antes; los nuevos son
+   los que tú acabas de colocar). Cada bloque trae:
+
+   ```xml
+   <include>
+     <uri>file:///home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/toolbox/2</uri>
+     <name>Toolbox_1</name>
+     <pose>-3.907 0.01 0.0 0.0 0.0 0.0</pose>
+   </include>
+   ```
+
+4. Traslada `uri` + `/model.sdf`, `name` y `pose` a un YAML de escenario
+   con el formato:
+
+   ```yaml
+   wp08_toolbox1:
+     modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/toolbox/2/model.sdf"
+     pose: [-3.907, 0.01, 0.0, 0.0, 0.0, 0.0]
+   ```
+
+   La clave (`wp08_toolbox1`) es el nombre de instancia que se usará al
+   spawnear y eliminar el elemento; no tiene por qué coincidir con el
+   `<name>` autogenerado por Gazebo.
+   
+   Recomiendo el uso de IA para agilizar este último paso.
+
+Ver `worlds/world_escenario2.sdf` para una plantilla en blanco con esta
+misma guía incrustada, pensada para crear escenarios adicionales sin
+partir de cero.
+
+
+### 3. Servicios de Gazebo para crear/eliminar elementos en caliente
+
+Con el mundo ya corriendo (Gazebo, Nav2 y AMCL activos), es posible
+añadir y quitar modelos sin reiniciar la simulación ni perder la
+localización del robot.
+
+Primero, averigua el nombre del mundo activo:
+
+```bash
+gz service -l | grep create
+```
+
+Spawnear un elemento:
+
+```bash
+gz service -s /world/NOMBRE_MUNDO/create \
+  --reqtype gz.msgs.EntityFactory --reptype gz.msgs.Boolean \
+  --timeout 1000 \
+  --req 'sdf_filename: "/home/bran/.gz/fuel/.../toolbox/2/model.sdf", name: "wp08_toolbox1", pose: {position: {x: -3.907, y: 0.01, z: 0.0}}'
+```
+
+Eliminarlo:
+
+```bash
+gz service -s /world/NOMBRE_MUNDO/remove \
+  --reqtype gz.msgs.Entity --reptype gz.msgs.Boolean \
+  --timeout 1000 \
+  --req 'name: "wp08_toolbox1", type: MODEL'
+```
+
+**Aviso sobre rutas con caracteres especiales:** algunos modelos de Fuel
+tienen nombres de directorio con dos puntos (p. ej.
+`drc practice: orange jersey barrier`). Encierra siempre `sdf_filename`
+entre comillas dobles dentro del `--req`, o el shell puede interpretar
+mal la ruta.
+
+### 4. Escenarios actuales
+
+| Escenario | Descripción |
+|---|---|
+| `escenario_A.yaml` | Estado base: todos los puntos con señal presente (boyas rojas en wp01). |
+| `escenario_B.yaml` | Degradación parcial: boyas verdes en wp01; wp02, wp05, wp06 y wp08 vaciados parcial o totalmente; wp03/wp04 sin cambios. |
+| `escenario_C.yaml` | Degradación en wp02/wp03/wp04; recuperación de wp05/wp06/wp08 al estado de A; wp01 se mantiene en verde. |
+
+Entre los tres escenarios, cada waypoint mutable pasa por estado
+presente/ausente sin repetir la misma combinación completa — pensado
+como evidencia en la defensa de que la detección responde al estado real
+de la escena y no a un resultado memorizado.
+
+### 5. Pendiente (TODO)
+
+- **`scripts/cargar_escenario.py`**: script que debe hacer *diff* entre
+  el escenario actualmente cargado y el nuevo YAML — crear lo que
+  aparece, **eliminar lo que ya no está** — no solo iterar y crear el
+  YAML nuevo, o quedarán elementos "fantasma" de escenarios anteriores.
+- **`eventos/barrera_wp07.yaml`**: guion final de disparo. Confirmado que
+  ambas instancias de barrera forman una única zona cortada (un solo
+  evento), pendiente decidir si se spawnean simultáneamente o con
+  desfase temporal dentro del script de evento.
