@@ -1,0 +1,34 @@
+# =============================================================================
+# eventos/barrera_wp02_wp03.yaml
+# Evento runtime — NO es estado inicial de escenario.
+# Corta el pasillo 1 en la esquina que conecta con el pasillo 2 (zona de la
+# foto de wp03), forzando reroute de Nav2 durante el tránsito wp02→wp03.
+# pose: [x, y, z, roll, pitch, yaw]
+#
+# Las 4 barreras + 2 conos forman UN ÚNICO evento (un solo corte);
+# se spawnean juntos en la misma llamada del script de evento.
+# =============================================================================
+
+wp02wp03_barrera1:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/drc practice: orange jersey barrier/3/model.sdf"
+  pose: [10.281051635742188, -19.683719635009766, 0.0, 0.0, 0.0, -1.133749939249846]
+
+wp02wp03_barrera2:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/drc practice: orange jersey barrier/3/model.sdf"
+  pose: [8.7167978286743164, -20.084882736206055, 0.0, 0.0, 0.0, 1.6217299761248942]
+
+wp02wp03_barrera3:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/drc practice: orange jersey barrier/3/model.sdf"
+  pose: [7.6123447418212891, -19.784076690673828, 0.0, 0.0, 0.0, 1.048490063334887]
+
+wp02wp03_barrera4:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/drc practice: orange jersey barrier/3/model.sdf"
+  pose: [11.42388449892352, -17.739471043303222, 0.0, 0.0, 0.0, 0.0]
+
+wp02wp03_cono1:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/model.sdf"
+  pose: [8.3821050320204797, -19.486302721869272, 0.0, 0.0, 0.0, 0.0]
+
+wp02wp03_cono2:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/construction cone/3/model.sdf"
+  pose: [9.2650386999601793, -19.4485665697906, 0.0, 0.0, 0.0, 0.0]

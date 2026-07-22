@@ -1,0 +1,19 @@
+# =============================================================================
+# eventos/barrera_wp05_wp06.yaml
+# Evento runtime — NO es estado inicial de escenario.
+# Corta el pasillo entre wp05 (esquina_pasillo_5) y wp06 (armario_central),
+# forzando reroute de Nav2 durante ese tramo.
+# pose: [x, y, z, roll, pitch, yaw]
+# =============================================================================
+
+wp05wp06_barrera1:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/drc practice: orange jersey barrier/3/model.sdf"
+  pose: [-11.70106029510498, -16.647495269775391, 0.0, 0.0, 0.0, -0.65325997609475128]
+
+wp05wp06_barrera2:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/drc practice: orange jersey barrier/3/model.sdf"
+  pose: [-12.734100341796875, -17.472999572753906, 0.0, 0.0, 0.0, -1.4314217617791021]
+
+wp05wp06_barrera3:
+  modelo: "/home/bran/.gz/fuel/fuel.gazebosim.org/openrobotics/models/drc practice: orange jersey barrier/3/model.sdf"
+  pose: [-14.042981147766113, -17.096345901489258, 0.0, 0.0, 0.0, 1.0361099929617612]
