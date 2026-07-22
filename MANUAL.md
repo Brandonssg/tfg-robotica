@@ -543,9 +543,66 @@ debe volver a capturarse.
 
 **Requiere** `opencv-python` (`pip install opencv-python --break-system-packages`).
 
-### 6. Pendiente (TODO)
+## Detección de obstáculos dinámicos: registro con foto y log
 
-- **`eventos/barrera_wp07.yaml`**: guion final de disparo. Confirmado
-  que ambas instancias de barrera forman una única zona cortada (un
-  solo evento), pendiente decidir si se spawnean simultáneamente o con
-  desfase temporal dentro del script de evento.
+Nodo independiente (`scripts/detector_obstaculos.py`) que vigila `/scan`
+durante toda la misión y, cuando el LiDAR devuelve puntos sobre celdas que
+el mapa estático marca como libres, registra el evento con foto y pose.
+
+**No interviene en la navegación**: Nav2 ya replanifica solo, porque su
+costmap se alimenta directamente de `/scan`. Este nodo es puramente de
+evidencia/registro — si fallase, la misión de navegación no se ve afectada
+(misma separación navegación-crítica / percepción-analítica que el
+análisis de visión de `ruta_waypoints_foto.py`).
+
+### Requisitos (una sola vez)
+
+```bash
+pip install pillow pyyaml --break-system-packages
+```
+
+(`opencv-python`, `numpy`, `cv_bridge` ya se instalaron para el resto del
+proyecto)
+
+### Ejecución
+
+En un tercer terminal, en paralelo a Nav2 y a la misión:
+
+```bash
+python3 scripts/detector_obstaculos.py
+```
+
+### Cómo detecta
+
+Compara cada scan de LiDAR contra el mapa estático (`mapa_tfg_semi_3_limpio`)
+transformando cada punto válido al frame `map` vía TF. Si el punto cae en
+una celda marcada libre, se cuenta como anómalo. Con histéresis en dos
+niveles para evitar falsos positivos por ruido:
+
+- `MIN_PUNTOS_ANOMALOS` (150): puntos anómalos mínimos en un solo scan.
+- `SCANS_CONSECUTIVOS` (3): scans seguidos con anomalía antes de confirmar.
+- `COOLDOWN_SEG` (15): tras confirmar un evento, no vuelve a comprobar
+  hasta pasado este tiempo, para no loguear el mismo obstáculo repetidas
+  veces mientras el robot maniobra cerca.
+
+**Decisión de diseño**: el detector no distingue entre un obstáculo
+dinámico real (barreras de `eventos/*.yaml`) y el mobiliario del escenario
+de inspección activo (conos, carritos, etc. de `escenarios/*.yaml`) —
+ambos son, para el mapa estático generado sin ningún escenario cargado,
+celdas libres ocupadas. Se ha decidido conscientemente no filtrarlo: no
+importa el origen del obstáculo para el registro, y detectar también el
+mobiliario del escenario es válido (posible ampliación futura: alimentar
+una capa de costmap adicional, o verificar que el mobiliario del escenario
+está en su sitio). Existe un flag opcional `--escenario <ruta_yaml>` que
+excluiría por radio las posiciones conocidas del escenario, implementado
+pero no usado.
+
+### Salida
+
+- `fotos_obstaculos/obstaculo_<timestamp>.png` — último frame de cámara
+  disponible en el momento de la confirmación. **Limitación conocida**:
+  al ser la cámara de FOV estrecho frente a un LiDAR de 360°, si la
+  anomalía se detecta fuera del eje frontal de la cámara (p. ej. durante
+  un giro) la foto puede no mostrar el obstáculo.
+- `fotos_obstaculos/log_obstaculos.csv` — una fila por evento:
+  `timestamp, x, y, puntos_anomalos, foto`.
