@@ -6,3 +6,4 @@ __pycache__/
 fotos_waypoints/
 escenarios/.estado_actual.yaml
 fotos_waypoints/analizadas/
+fotos_obstaculos/*
