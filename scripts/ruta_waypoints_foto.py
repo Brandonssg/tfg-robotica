@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Ruta de inspeccion por waypoints: navegacion + foto + pausa en cada punto.
+"""Ruta de inspeccion por waypoints: navegacion + foto + analisis + pausa.
 
 Evolucion de ruta_waypoints.py: en lugar de delegar la mision completa en
 followWaypoints(), se navega waypoint a waypoint con goToPose(). Al llegar a
 cada punto, el robot captura una imagen de la camara (topic /camera/image_raw),
-la guarda en disco con el nombre del waypoint, y espera PAUSA_SEG segundos
-antes de continuar. Las imagenes serviran de entrada al analisis de vision
-artificial (Fase 4).
+la guarda en disco con el nombre del waypoint, la analiza al instante con
+scripts/vision/inspeccionar.py (sin esperar a que termine la mision), y espera
+PAUSA_SEG segundos antes de continuar. Al finalizar la mision se imprime y
+guarda el mismo informe de 9 puntos que generaria inspeccionar.py a mano.
 
 Uso:
     python3 scripts/ruta_waypoints_foto.py
@@ -17,8 +18,10 @@ Requisitos (una sola vez, van a MANUAL.md):
 
 import math
 import os
+import sys
 import time
 from datetime import datetime
+from pathlib import Path
 
 import cv2                                    # OpenCV: escritura de imagenes (y futura vision).
 import rclpy
@@ -27,6 +30,11 @@ from geometry_msgs.msg import PoseStamped
 from rclpy.wait_for_message import wait_for_message  # Espera bloqueante de UN mensaje.
 from sensor_msgs.msg import Image
 from nav2_simple_commander.robot_navigator import BasicNavigator, TaskResult
+
+# scripts/vision/ vive junto a este script: se añade al path para poder
+# reusar el despachador y sus detectores sin duplicar codigo.
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "vision"))
+from inspeccionar import inspeccionar_foto, ORDEN_RUTA, SIN_VISION, DIR_ANALIZADAS  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # CONFIGURACION
@@ -88,8 +96,9 @@ def construir_ruta(navigator: BasicNavigator) -> list[PoseStamped]:
 
 
 def tomar_foto(navigator: BasicNavigator, bridge: CvBridge,
-               indice: int, nombre: str) -> None:
-    """Captura UNA imagen de la camara y la guarda en DIR_FOTOS.
+               indice: int, nombre: str) -> str | None:
+    """Captura UNA imagen de la camara, la guarda en DIR_FOTOS y devuelve
+    la ruta guardada (None si no se ha podido capturar).
 
     wait_for_message crea una suscripcion temporal, espera el primer
     mensaje del topic y la destruye: exactamente lo que necesitamos para
@@ -100,7 +109,7 @@ def tomar_foto(navigator: BasicNavigator, bridge: CvBridge,
         navigator.get_logger().warn(
             f"Sin imagen de {TOPIC_CAMARA} en 5 s; se omite la foto de '{nombre}'."
         )
-        return
+        return None
 
     # Conversion del mensaje ROS a matriz OpenCV en BGR (formato nativo de cv2):
     imagen = bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
@@ -111,6 +120,7 @@ def tomar_foto(navigator: BasicNavigator, bridge: CvBridge,
     ruta = os.path.join(DIR_FOTOS, f"wp{indice + 1:02d}_{seguro}_{marca}.png")
     cv2.imwrite(ruta, imagen)
     navigator.get_logger().info(f"Foto guardada: {ruta}")
+    return ruta
 
 
 # ---------------------------------------------------------------------------
@@ -128,8 +138,9 @@ def main() -> None:
 
     ruta = construir_ruta(navigator)
     navigator.get_logger().info(f"Mision de inspeccion: {len(ruta)} waypoints, "
-                                f"pausa de {PAUSA_SEG:.0f} s con foto en cada uno.")
+                                f"pausa de {PAUSA_SEG:.0f} s con foto+analisis en cada uno.")
     t_inicio = time.monotonic()               # Cronometro de la mision (metrica para la memoria).
+    estados = {}                              # wp -> mensaje de inspeccion, para el informe final
 
     for i, pose in enumerate(ruta):
         nombre = WAYPOINTS[i][0]
@@ -166,9 +177,22 @@ def main() -> None:
                                          "Se continua con el siguiente waypoint.")
             continue
 
-        # Waypoint alcanzado: foto + resto de la pausa hasta completar PAUSA_SEG.
+        # Waypoint alcanzado: foto + analisis + resto de la pausa hasta PAUSA_SEG.
         t_foto = time.monotonic()
-        tomar_foto(navigator, bridge, i, nombre)
+        ruta_foto = tomar_foto(navigator, bridge, i, nombre)
+        wp_id = f"wp{i + 1:02d}"
+        if ruta_foto is not None:
+            try:
+                _, msg, _ = inspeccionar_foto(ruta_foto)   # guarda tambien la figura anotada
+                if msg:
+                    estados[wp_id] = msg
+                    navigator.get_logger().info(f"   Analisis: {msg}")
+            except Exception as e:
+                # Un fallo del analisis (p. ej. falta la referencia de un wp)
+                # NO debe abortar la mision de navegacion: se registra y se
+                # sigue. La foto ya esta guardada y puede reanalizarse luego
+                # a mano con inspeccionar.py.
+                navigator.get_logger().warn(f"   Analisis fallido en {wp_id}: {e}")
         transcurrido = time.monotonic() - t_foto
         if transcurrido < PAUSA_SEG:
             time.sleep(PAUSA_SEG - transcurrido)
@@ -176,6 +200,24 @@ def main() -> None:
     duracion = time.monotonic() - t_inicio
     navigator.get_logger().info(f"Mision completada en {duracion:.1f} s "
                                 f"({duracion / 60:.1f} min).")
+
+    # --- Informe de inspeccion: mismo formato que generaria inspeccionar.py
+    # a mano sobre el directorio, pero ya con los resultados calculados
+    # durante la mision (no hace falta releer ni reanalizar nada). ---
+    lineas = [f"INFORME DE INSPECCION - {datetime.now().strftime('%d/%m/%Y %H:%M')}",
+              f"Mision: {DIR_FOTOS}", ""]
+    for wp in ORDEN_RUTA:
+        estado = estados.get(wp) or SIN_VISION.get(wp) or "sin foto en esta mision"
+        lineas.append(f"  {wp}  {estado}")
+    avisos = sum(1 for wp in ORDEN_RUTA
+                 if (estados.get(wp) or "").startswith(("AVISO", "NO VALIDABLE")))
+    lineas += ["", f"Puntos con aviso o no validables: {avisos}"]
+    informe = "\n".join(lineas)
+    destino_dir = Path(DIR_FOTOS) / DIR_ANALIZADAS
+    destino_dir.mkdir(parents=True, exist_ok=True)
+    destino = destino_dir / f"informe_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+    destino.write_text(informe + "\n", encoding="utf-8")
+    navigator.get_logger().info("\n" + informe + f"\n\nInforme guardado en: {destino}")
 
     # NO llamar a navigator.lifecycleShutdown(): apagaria todos los nodos de
     # Nav2 (AMCL incluido) e impediria relanzar misiones sin reiniciar el

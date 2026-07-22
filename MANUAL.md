@@ -486,6 +486,63 @@ acuse del planner bajo carga) visto en pruebas anteriores.
 Cifra de comparación para las misiones con escenario + obstáculos
 dinámicos de la Fase 4.
 
+## Análisis de visión de la inspección
+
+La misión de inspección (`scripts/ruta_waypoints_foto.py`, sección anterior)
+ya analiza cada foto en el momento de capturarla y, al finalizar, genera el
+informe de la misión en `fotos_waypoints/analizadas/informe_<fecha>.txt` —
+no requiere ningún paso manual adicional.
+
+Para reanalizar fotos ya capturadas (p. ej. tras ajustar un detector) o
+validar un detector suelto sin simulador:
+
+```bash
+python3 scripts/vision/inspeccionar.py                    # última foto de
+                                                            # cada wp en
+                                                            # fotos_waypoints/
+```
+
+```bash
+python3 scripts/vision/inspeccionar.py ruta/al/directorio/           # otro directorio
+python3 scripts/vision/deteccion_hue.py foto.png           # un detector suelto
+```
+
+Cada detector puede probarse también por separado sin simulador:
+`python3 scripts/vision/deteccion_hue.py foto.png`, etc.
+
+**Arquitectura**: un módulo por primitiva de detección (`deteccion_hue.py`,
+`deteccion_value.py`, `deteccion_forma.py`, `deteccion_referencia.py`) con
+interfaz común (`comun.py`), y un despachador (`inspeccionar.py`) con una
+tabla declarativa `waypoint -> detector + parámetros + interpretación` —
+mismo patrón que `cargar_escenario.py`.
+
+**Catálogo de detección por waypoint** (validado sobre 73 fotos reales):
+
+| WP | Método | Qué mide |
+|---|---|---|
+| wp01 | color (hue) | boyas rojo/verde → envío en preparación/listo |
+| wp02 | conteo de componentes (hue rojo) | nº de toolbox+extintor (≥3 = completo) |
+| wp03 | compuesto: gate de diff + conteo (hue azul) | valida encuadre; si es válido, cuenta paneles de los carritos (≥3 = presentes) |
+| wp04 | forma/contorno | nº de franjas del cono de obra (≥1 = incidencia) |
+| wp05 | brillo + componente conexa | mancha oscura grande = cono negro |
+| wp06 | color (hue lima) | chaleco de alta visibilidad = personal presente |
+| wp07 | — | sin visión; demo de replanificación Nav2 |
+| wp08 | color (hue rojo) | material presente en estantería |
+| wp09 | — | cierre de ruta, sin inspección |
+
+**Salida**: cada detector guarda además la foto con la detección superpuesta
+en `fotos_waypoints/analizadas/<nombre>_analizada.png` (excluido del
+repositorio, es dato generado). Al analizar una misión completa (directorio),
+se genera también `fotos_waypoints/analizadas/informe_<fecha>.txt` con el
+estado de los 9 waypoints.
+
+**Referencias** (`scripts/vision/referencias/wp03_ref.png`, usada solo como
+gate de encuadre en wp03): fotografía del pasillo despejado, capturada
+manualmente. Si se regenera el escenario o se cambia la pose de wp03,
+debe volver a capturarse.
+
+**Requiere** `opencv-python` (`pip install opencv-python --break-system-packages`).
+
 ### 6. Pendiente (TODO)
 
 - **`eventos/barrera_wp07.yaml`**: guion final de disparo. Confirmado

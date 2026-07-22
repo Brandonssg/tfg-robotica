@@ -5,3 +5,4 @@ __pycache__/
 *.swp
 fotos_waypoints/
 escenarios/.estado_actual.yaml
+fotos_waypoints/analizadas/
