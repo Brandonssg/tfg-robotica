@@ -457,6 +457,51 @@ está excluido del repositorio vía `.gitignore`.
 > de este mecanismo deliberadamente: es un evento runtime que se inyecta
 > a mitad de misión, no estado inicial de escenario (ver sección 1).
 
+### 6. Disparo de eventos dinámicos: `scripts/disparar_evento.py`
+
+A diferencia de un escenario (sección 5), un evento **no se carga antes
+de la misión**: se inyecta *a mitad de ella*, en un segundo terminal,
+para forzar que Nav2 detecte un obstáculo inesperado y replanifique.
+Por eso no usa el mecanismo de diff/estado persistido de
+`cargar_escenario.py` — un evento solo se crea, nunca se compara contra
+un estado anterior.
+
+**Uso:**
+
+```bash
+# En un SEGUNDO terminal, con la misión ya en marcha en el primero,
+# justo antes de que el robot entre en el tramo que quieres cortar:
+python3 scripts/disparar_evento.py eventos/barrera_wp02_wp03.yaml
+
+# Para repetir la demo sin reiniciar Gazebo (retira las entidades):
+python3 scripts/disparar_evento.py eventos/barrera_wp02_wp03.yaml --retirar
+```
+
+**Por qué "justo antes" y no en el instante exacto:** `gz service create`
+tarda una fracción de segundo en registrar la entidad y en que aparezca
+en el siguiente escaneo del LiDAR. Si se dispara con el robot ya encima
+del obstáculo, Nav2 puede resolverlo con evasión local (DWB) en vez de
+con la replanificación global del planner, que es el efecto que
+queremos que se vea en la demo. Un par de segundos de antelación lo
+garantizan.
+
+**Idempotencia:** antes de crear, el script consulta `gz model --list`
+y omite (sin fallar) cualquier entidad del evento que ya exista. Esto
+permite relanzarlo sin miedo a duplicados si algo se interrumpe a
+mitad.
+
+**Eventos actuales:**
+
+| Evento | Tramo cortado | Elementos | Bloqueo |
+|---|---|---|---|
+| `eventos/barrera_wp02_wp03.yaml` | esquina pasillo 1 → pasillo 2 (antes de la foto de wp03) | 4 barreras + 2 conos | Total |
+| `eventos/barrera_wp05_wp06.yaml` | pasillo entre wp05 y wp06 | 3 barreras | Total |
+| `eventos/barrera_wp07.yaml` | viga centro del mapa (wp07) | 2 barreras | Total |
+
+Los tres cubren tramos distintos de la ruta real, para demostrar que la
+replanificación no es un caso aislado sino un comportamiento
+generalizable de Nav2.
+
 
 ### Validación: persistencia de Nav2 entre misiones consecutivas
 
